@@ -60,7 +60,7 @@ void App::Start() {
                 m_Root.AddChild(map_objects[i][j]);
                 //std::cout <<"ok4"<< std::endl;
             }
-            else if(Map[i][j]==7) {
+            else if(Map[i][j]==17) {
                 map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/grass.png");
                 map_objects[i][j]->SetPosition({-320+(j*16),150-(i*16)});
                 map_objects[i][j]->SetZIndex(3);
@@ -110,6 +110,7 @@ void App::Start() {
     for (int i = 0; i < 2; ++i) {
         goombaimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/a" + std::to_string(i + 1) + ".png");
     }
+    goombadeadimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/a3.png");
 
     goomba=std::make_shared<AnimatedCharacter>(goombaimg);
     goomba->SetPosition({0, 0});
@@ -117,5 +118,6 @@ void App::Start() {
     m_Root.AddChild(goomba);
     std::cout<<"k"<<std::endl;
     enemyx=-1.0f;
+    goomba_dead=false;
     m_CurrentState = State::UPDATE;
 }

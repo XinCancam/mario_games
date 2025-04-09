@@ -75,13 +75,13 @@ void App::Update() {
             }
         }
     }
-    if(m_Collision.CheckCollision(goomba->GetPosition(),m_player->GetPosition() ,8.0f,5.0f,5.0f,8.0f)) {
+    if(m_Collision.CheckCollision(goomba->GetPosition(),m_player->GetPosition() ,8.0f,5.0f,5.0f,8.0f)&&goomba_dead==false) {
         if(m_PlayerPosition.y<0.0f) {
-            m_Root.RemoveChild(goomba);
-            goomba->SetPosition({-400,-400});
+            goomba_dead=true;
+            m_PlayerPosition.y=3.0f;
         }
 
-        else {
+        else{
             player_dead=true;
         }
         //std::cout<<m_PlayerPosition.x<<" "<<m_PlayerPosition.y<<std::endl;
@@ -132,7 +132,19 @@ void App::Update() {
         std::cout<<m_player->GetPosition().x<<","<<m_player->GetPosition().y<<std::endl;
         std::cout<<"movement:"<<m_PlayerPosition.x<<","<<m_PlayerPosition.y<<std::endl;
     }
-
+    if(goomba_dead) {
+        enemyx=0.0f;
+        Animate_time+=1;
+        goomba->SetImage(goombadeadimg);
+        if(Animate_time>25) {
+            Animate_time=0;
+            m_Root.RemoveChild(goomba);
+        }
+    }
+    if(Util::Input::IsKeyDown(Util::Keycode::I)) {
+        m_player->m_Transform.scale.y*=1.5;
+        m_player->m_Transform.scale.x*=1.5;
+    }
         //std::cout<<m_player->IsLooping()<<std::endl;
 
         /*

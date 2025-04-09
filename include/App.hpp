@@ -47,15 +47,17 @@ private:
     std::vector<std::string> marioImages;
     std::shared_ptr<AnimatedCharacter> goomba;
     std::vector<std::string> goombaimg;
+    std::vector<std::string> goombadeadimg;
     float enemyy=0.0f;
     float enemyx=-1.0f;
     bool player_dead = false;
+    bool goomba_dead = false;
     bool m_EnterDown=false;
     float m_speed=0.5f;
     float m_upspeed=12.0f;
     bool m_up=false;
     float downspeed=1.0f;
-
+    int Animate_time=0;
     glm::vec2 m_PlayerPosition=glm::vec2(0.0f,0.0f);
 };
 
