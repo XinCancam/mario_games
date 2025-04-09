@@ -7,6 +7,7 @@ int main(int, char**) {
     App app;
 
     while (!context->GetExit()) {
+        context->Update();
         switch (app.GetCurrentState()) {
             case App::State::START:
                 app.Start();
@@ -21,7 +22,7 @@ int main(int, char**) {
                 context->SetExit(true);
                 break;
         }
-        context->Update();
+
     }
     return 0;
 }
