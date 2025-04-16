@@ -11,7 +11,9 @@
 class AnimatedCharacter : public Util::GameObject {
 
 public:
-    explicit AnimatedCharacter(const std::vector<std::string>& AnimationPaths);
+    explicit AnimatedCharacter(const std::vector<std::string>& AnimationPaths1,const std::vector<std::string>& AnimationPaths2,const std::vector<std::string>& AnimationPaths3,
+        const std::vector<std::string>& AnimationPaths4,const std::vector<std::string>& AnimationPaths5,const std::vector<std::string>& AnimationPaths6,
+        const std::vector<std::string>& AnimationPaths7,const std::vector<std::string>& AnimationPaths8,const std::vector<std::string>& AnimationPaths9,const std::vector<std::string>& AnimationPaths10);
 
     [[nodiscard]] bool IsLooping() const {
         return std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->GetLooping();
@@ -25,11 +27,21 @@ public:
         auto temp = std::dynamic_pointer_cast<Util::Animation>(m_Drawable);
         temp->SetLooping(looping);
     }
-    void SetImage(const std::vector<std::string>& AnimationPaths);
+    void SetImage(const int x);
     [[nodiscard]] bool IfAnimationEnds() const;
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
-
+private:
+    std::shared_ptr<Util::Animation> Amimation1;
+    std::shared_ptr<Util::Animation> Amimation2;
+    std::shared_ptr<Util::Animation> Amimation3;
+    std::shared_ptr<Util::Animation> Amimation4;
+    std::shared_ptr<Util::Animation> Amimation5;
+    std::shared_ptr<Util::Animation> Amimation6;
+    std::shared_ptr<Util::Animation> Amimation7;
+    std::shared_ptr<Util::Animation> Amimation8;
+    std::shared_ptr<Util::Animation> Amimation9;
+    std::shared_ptr<Util::Animation> Amimation10;
 };
 
 #endif //ANIMATED_CHARACTER_HPP
