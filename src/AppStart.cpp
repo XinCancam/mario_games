@@ -46,6 +46,18 @@ void App::Start() {
     m_player->SetImage(1);
     m_Root.AddChild(m_player);
     player_dead=false;
+    mushroom_count=0;
+    for(int x=0;x<16;x++) {
+        itemx[x]=2.0f;
+        itemy[x]=0.0f;
+    }
+    for(int i=0;i<16;i++) {
+        item[i]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/item/mushroom.png");
+        item[i]->SetPosition({0, 0});
+        item[i]->SetZIndex(1);
+        item[i]->SetVisible(false);
+        m_Root.AddChild(item[i]);
+    }
     m_background=std::make_shared<BackgroundImage>();
     bg=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/sky.png");
     bg->SetPosition({0, 0});
@@ -79,6 +91,8 @@ void App::Start() {
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
                 map_objects[i][j]->SetZIndex(3);
                 m_Root.AddChild(map_objects[i][j]);
+                item[mushroom_count]->SetPosition(map_objects[i][j]->GetPosition());
+                mushroom_count++;
                 //std::cout <<"ok3"<< std::endl;
             }
             else if(Map[i][j]==1) {
@@ -125,15 +139,29 @@ void App::Start() {
         goombaimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/goomba1_" + std::to_string(i + 1) + ".png");
     }
     goombadeadimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/goomba1_dead.png");
-
-    goomba=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
-    goomba->SetPosition({200, 0});
-    goomba->SetZIndex(6);
-    goomba->SetImage(1);
-    m_Root.AddChild(goomba);
+    for(int i=0;i<10;i++) {
+        goomba[i]=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+        goomba[i]->SetZIndex(6);
+        goomba[i]->SetImage(1);
+        m_Root.AddChild(goomba[i]);
+        enemyx[i]=-2.0f;
+        goomba_dead[i]=false;
+        goomba_dead_animate[i]=0;
+    }
+    goomba[0]->SetPosition({800, 0});
+    goomba[1]->SetPosition({1600, 0});
+    goomba[2]->SetPosition({2400, 0});
+    goomba[3]->SetPosition({4000, 0});
+    goomba[4]->SetPosition({4100, 0});
+    goomba[5]->SetPosition({5600, 0});
+    goomba[6]->SetPosition({6500, 0});
+    goomba[7]->SetPosition({7300, 0});
+    goomba[8]->SetPosition({8500, 0});
+    goomba[9]->SetPosition({9200, 0});
     std::cout<<"k"<<std::endl;
-    enemyx=-2.0f;
-    goomba_dead=false;
+
     Animate_time=0;
+    mario_size=1;
+    mario_hitbox={18.0f,24.0f};
     m_CurrentState = State::UPDATE;
 }

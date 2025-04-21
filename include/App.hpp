@@ -28,7 +28,8 @@ public:
 
     void End(); // NOLINT(readability-convert-member-functions-to-static)
     App(): map_objects(20, std::vector<std::shared_ptr<Character>>(200, nullptr)),
-            back_objects(20, std::vector<std::shared_ptr<Character>>(200, nullptr)){}
+            back_objects(20, std::vector<std::shared_ptr<Character>>(200, nullptr)),
+            itemx(16),itemy(16),item(16),goomba(10),enemyx(10),enemyy(10),goomba_dead_animate(10),goomba_dead(10){}
 private:
     void ValidTask();
 
@@ -40,19 +41,26 @@ private:
     std::shared_ptr<AnimatedCharacter> m_player;
     std::vector<std::vector<std::shared_ptr<Character>>> map_objects;
     std::vector<std::vector<std::shared_ptr<Character>>> back_objects;
+    std::vector<std::shared_ptr<Character>> item;
     Collision m_Collision;
     std::shared_ptr<BackgroundImage> m_background;
     std::shared_ptr<Character> bg;
     std::vector<std::string> mario_stand;
     std::vector<std::string> marioImages;
-    std::shared_ptr<AnimatedCharacter> goomba;
+    std::vector<std::shared_ptr<AnimatedCharacter>> goomba;
     std::vector<std::string> goombaimg;
     std::vector<std::string> goombadeadimg;
-    float enemyy=0.0f;
-    float enemyx=-2.0f;
+    std::vector<float> enemyy;
+    std::vector<float> enemyx;
+    std::vector<float> itemx={0.0f};
+    std::vector<float> itemy={0.0f};
     bool player_dead = false;
-    bool goomba_dead = false;
+    std::vector<bool> goomba_dead;
+    std::vector<int> goomba_dead_animate;
     bool m_EnterDown=false;
+    int mario_size=1;
+    int mushroom_count=0;
+    glm::vec2 mario_hitbox=glm::vec2(18.0f,24.0f);
     float m_speed=1.0f;
     float m_upspeed=22.0f;
     bool m_up=false;

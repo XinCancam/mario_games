@@ -26,7 +26,13 @@ void App::Update() {
     if(Util::Input::IsKeyDown(Util::Keycode::W)&&!m_up) {
         m_PlayerPosition.y+=m_upspeed;
         m_up=true;
-        m_player->SetImage(2);
+    }
+    if(m_up) {
+        if(mario_size==2){m_player->SetImage(5);}
+        else if(mario_size==3){m_player->SetImage(8);}
+        else {
+            m_player->SetImage(2);
+        }
     }
     if(m_PlayerPosition.y<-8.0f) {
         m_PlayerPosition.y=-8.0f;
@@ -35,78 +41,143 @@ void App::Update() {
     if(!(Util::Input::IsKeyPressed(Util::Keycode::A))&&!(Util::Input::IsKeyPressed(Util::Keycode::D))) {
         m_PlayerPosition.x=0.0f;
         if(m_PlayerPosition.x==0.0f&&(!m_up)) {
-            m_player->SetImage(3);
+            if(mario_size==2){m_player->SetImage(6);}
+            else if(mario_size==3){m_player->SetImage(9);}
+            else {
+                m_player->SetImage(3);
+            }
         }
     }
     else {
         if(m_PlayerPosition.x!=0.0f&&(!m_up)) {
-            m_player->SetImage(1);
+            if(mario_size==2){m_player->SetImage(4);}
+            else if(mario_size==3){m_player->SetImage(7);}
+            else {
+                m_player->SetImage(1);
+            }
         }
     }
     m_PlayerPosition.y-=downspeed;
-    enemyy-=downspeed;
+    for(int i=0;i<10;i++) {
+        if(goomba[i]->GetPosition().x<700.f){
+            enemyy[i]-=downspeed;
+        }
+    }
+
     //Collison-------------------------
     int (*Map)[200]=m_background->NextPhase(1);
     for(int i=0;i<20;i++) {
         for(int j=0;j<200;j++) {
             if (Map[i][j] == 2 || Map[i][j] == 3 || Map[i][j] == 4 || Map[i][j] == 1 || Map[i][j]==120 || Map[i][j]==121 || Map[i][j]==122 || Map[i][j]==123 || Map[i][j]==200) {
                 //--------character collison---------------
-                if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),18.0f,24.0f,24.0f,24.0f)&&(!player_dead)) {
+                if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)) {
                     if(m_PlayerPosition.x>0.0f) {
                         float temp1=map_objects[i][j]->GetPosition().x-24.0f;
-                        float temp2=m_player->GetPosition().x+18.0f;
+                        float temp2=m_player->GetPosition().x+mario_hitbox.x;
                         m_player->SetPosition({m_player->GetPosition().x+(temp1-temp2),m_player->GetPosition().y,});
                     }
                     else if(m_PlayerPosition.x<0.0f) {
                         float temp1=map_objects[i][j]->GetPosition().x+24.0f;
-                        float temp2=m_player->GetPosition().x-18.0f;
+                        float temp2=m_player->GetPosition().x-mario_hitbox.x;
                         m_player->SetPosition({m_player->GetPosition().x+(temp1-temp2),m_player->GetPosition().y,});
                     }
                   m_PlayerPosition.x=0.0f;
                     //std::cout<<map_objects[i][j]->GetPosition().x<<" "<<map_objects[i][j]->GetPosition().y<<std::endl;
                     //std::cout<<m_player->GetPosition().x<<" "<<m_player->GetPosition().y<<std::endl;
                 }
-                else if (m_Collision.CheckCollision({(m_player->GetPosition().x),(m_player->GetPosition().y+m_PlayerPosition.y)}, map_objects[i][j]->GetPosition(),18.0f,24.0f,24.0f,24.0f)&&(!player_dead)) {
-                    if(m_PlayerPosition.y<0.0f) {m_up=false;}
+                else if (m_Collision.CheckCollision({(m_player->GetPosition().x),(m_player->GetPosition().y+m_PlayerPosition.y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)) {
+                    if(m_PlayerPosition.y<0.0f) {
+                        m_up=false;
+                        float temp1=map_objects[i][j]->GetPosition().y+24.0f;
+                        float temp2=m_player->GetPosition().y-mario_hitbox.y;
+                        m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
+                    }
                     if(m_PlayerPosition.y>0.0f&&Map[i][j]==3) {
                         map_objects[i][j]->SetImage(GA_RESOURCE_DIR"/Image/mapObjects/empty1.png");
                         Map[i][j]=200;
+                        float temp1=map_objects[i][j]->GetPosition().y-24.0f;
+                        float temp2=m_player->GetPosition().y+mario_hitbox.y;
+                        m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
+                        for(int x=0;x<16;x++) {
+                            if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&j%3==0&&mario_size==1) {
+                                item[x]->SetVisible(true);
+                                item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
+                            }
+                            else if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&j%3==0&&mario_size>=2) {
+                                item[x]->SetImage(GA_RESOURCE_DIR"/Image/item/fireflower1.png");
+                                item[x]->SetVisible(true);
+                                itemx[x]=0.0f;
+                                item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
+                            }
+                        }
                     }
-                    else if(m_PlayerPosition.y>0.0f&&Map[i][j]==4) {
+                    else if(m_PlayerPosition.y>0.0f&&Map[i][j]==4&&mario_size>1) {
                         m_Root.RemoveChild(map_objects[i][j]);
                         Map[i][j]=201;
+                        float temp1=map_objects[i][j]->GetPosition().y-24.0f;
+                        float temp2=m_player->GetPosition().y+mario_hitbox.y;
+                        m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
                     }
+
                     m_PlayerPosition.y=0.0f;
                     //std::cout<<map_objects[i][j]->GetPosition().x<<" "<<map_objects[i][j]->GetPosition().y<<std::endl;
                     //std::cout<<m_player->GetPosition().x<<" "<<m_player->GetPosition().y<<std::endl;
                 }
                 //-----------------------------------------
-
-                if(m_Collision.CheckCollision({(goomba->GetPosition().x+enemyx),(goomba->GetPosition().y)}, map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
-                    enemyx*=-1;
+                for(int k=0;k<10;k++) {
+                    if(m_Collision.CheckCollision({(goomba[k]->GetPosition().x+enemyx[k]),(goomba[k]->GetPosition().y)}, map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
+                        enemyx[k]*=-1;
+                    }
+                    if(m_Collision.CheckCollision({(goomba[k]->GetPosition().x),(goomba[k]->GetPosition().y+enemyy[k])}, map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
+                        enemyy[k]=0.0f;
+                    }
                 }
-                if(m_Collision.CheckCollision({(goomba->GetPosition().x),(goomba->GetPosition().y+enemyy)}, map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
-                    enemyy=0.0f;
+                for(int x=0;x<16;x++) {
+                    if(item[x]->GetVisibility()==true) {
+
+                        if(m_Collision.CheckCollision({(item[x]->GetPosition().x+itemx[x]),(item[x]->GetPosition().y)},map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
+                            itemx[x]*=-1;
+                        }
+                        if(m_Collision.CheckCollision({(item[x]->GetPosition().x),(item[x]->GetPosition().y+itemy[x])},map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
+                            itemy[x]=0.0f;
+                        }
+                    }
                 }
             }
         }
     }
-    if(m_Collision.CheckCollision(goomba->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,18.0f,24.0f)&&goomba_dead==false&&player_dead==false) {
-        if(m_PlayerPosition.y<0.0f) {
-            goomba_dead=true;
-            m_PlayerPosition.y=10.0f;
+    for(int x=0;x<16;x++) {
+        if(item[x]->GetVisibility()==true) {
+            if(m_Collision.CheckCollision(item[x]->GetPosition(),m_player->GetPosition(),24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)) {
+                if(mario_size==1){mario_size=2;}
+                else if(mario_size>=2&&itemx[x]==0.0f){mario_size=3;}
+                m_Root.RemoveChild(item[x]);
+                item[x]->SetVisible(false);
+                mario_hitbox={24.0f,48.0f};
+                m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+24.0f});
+            }
         }
-
-        else{
-            player_dead=true;
-        }
-        //std::cout<<m_PlayerPosition.x<<" "<<m_PlayerPosition.y<<std::endl;
     }
+    for(int i=0;i<10;i++) {
+        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false) {
+            if(m_PlayerPosition.y<0.0f) {
+                goomba_dead[i]=true;
+                m_PlayerPosition.y=10.0f;
+            }
+            else{
+                player_dead=true;
+            }
+            //std::cout<<m_PlayerPosition.x<<" "<<m_PlayerPosition.y<<std::endl;
+        }
+    }
+    if(m_PlayerPosition.y<-3.0f){m_up=true;}
     if(player_dead){
         m_PlayerPosition.x=0.0f;
         m_PlayerPosition.y=0.0f;
-        enemyx=0.0f;
-        enemyy=0.0f;
+        for(int x=0;x<10;x++) {
+            enemyx[x]=0.0f;
+            enemyy[x]=0.0f;
+        }
         m_player->SetImage(10);
         Animate_time+=1;
         if(Animate_time>30&&Animate_time<50) {
@@ -117,13 +188,18 @@ void App::Update() {
         }
         if(Animate_time>120) {
             m_Root.RemoveChild(m_player);
-            m_Root.RemoveChild(goomba);
+            for(int x=0;x<10;x++) {
+                m_Root.RemoveChild(goomba[x]);
+            }
             for(int i=0;i<20;i++) {
                 for(int j=0;j<200;j++) {
                     if(Map[i][j]==200){Map[i][j]=3;}
                     if(Map[i][j]==201){Map[i][j]=4;}
                     m_Root.RemoveChild(map_objects[i][j]);
                 }
+            }
+            for(int x=0;x<16;x++) {
+                m_Root.RemoveChild(item[x]);
             }
             m_CurrentState=State::START;
         }
@@ -133,8 +209,15 @@ void App::Update() {
         m_PlayerPosition.x=0.0f;
     }
     m_player->SetPosition({m_PlayerPosition.x+m_player->GetPosition().x,m_PlayerPosition.y+m_player->GetPosition().y});
-    goomba->SetPosition({goomba->GetPosition().x+enemyx,goomba->GetPosition().y+enemyy});
-
+    for(int k=0;k<10;k++) {
+        goomba[k]->SetPosition({goomba[k]->GetPosition().x+enemyx[k],goomba[k]->GetPosition().y+enemyy[k]});
+    }
+    for(int x=0;x<16;x++) {
+        if(item[x]->GetVisibility()==true) {
+            item[x]->SetPosition({item[x]->GetPosition().x+itemx[x],item[x]->GetPosition().y+itemy[x]});
+            itemy[x]-=downspeed;
+        }
+    }
     //---------------------------------
     //人物轉向------------------------------------------
     if(m_PlayerPosition.x>0.0f&&m_player->m_Transform.scale.x<0) {
@@ -158,14 +241,21 @@ void App::Update() {
         std::cout<<m_player->GetPosition().x<<","<<m_player->GetPosition().y<<std::endl;
         std::cout<<"movement:"<<m_PlayerPosition.x<<","<<m_PlayerPosition.y<<std::endl;
     }
-    if(goomba_dead) {
-        enemyx=0.0f;
-        if(Animate_time<=25) {
-            Animate_time+=1;
-        }
-        goomba->SetImage(2);
-        if(Animate_time>25) {
-            m_Root.RemoveChild(goomba);
+    if(Util::Input::IsKeyDown(Util::Keycode::H)) {
+        mario_size+=1;
+        if(mario_size>3){mario_size=1;mario_hitbox={18.0f,24.0f};}
+        else if(mario_size==2){mario_hitbox={24.0f,48.0f};m_player->SetPosition({m_player->GetPosition().x,+m_player->GetPosition().y+24.0f});}
+    }
+    for(int k=0;k<10;k++) {
+        if(goomba_dead[k]) {
+            enemyx[k]=0.0f;
+            if(goomba_dead_animate[k]<=25) {
+                goomba_dead_animate[k]+=1;
+            }
+            goomba[k]->SetImage(2);
+            if(goomba_dead_animate[k]>25) {
+                m_Root.RemoveChild(goomba[k]);
+            }
         }
     }
     if(Util::Input::IsKeyDown(Util::Keycode::I)) {
