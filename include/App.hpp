@@ -57,6 +57,8 @@ private:
     bool player_dead = false;
     std::vector<bool> goomba_dead;
     std::vector<int> goomba_dead_animate;
+    int player_dead_animate = 0;
+    bool mari0_sizem = false;
     bool m_EnterDown=false;
     int mario_size=1;
     int mushroom_count=0;

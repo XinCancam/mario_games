@@ -162,6 +162,7 @@ void App::Start() {
 
     Animate_time=0;
     mario_size=1;
+    player_dead_animate=0;
     mario_hitbox={18.0f,24.0f};
     m_CurrentState = State::UPDATE;
 }

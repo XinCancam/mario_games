@@ -99,11 +99,11 @@ void App::Update() {
                         float temp2=m_player->GetPosition().y+mario_hitbox.y;
                         m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
                         for(int x=0;x<16;x++) {
-                            if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&j%3==0&&mario_size==1) {
+                            if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&x%5==0&&mario_size==1) {
                                 item[x]->SetVisible(true);
                                 item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
                             }
-                            else if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&j%3==0&&mario_size>=2) {
+                            else if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&x%5==0&&mario_size>=2) {
                                 item[x]->SetImage(GA_RESOURCE_DIR"/Image/item/fireflower1.png");
                                 item[x]->SetVisible(true);
                                 itemx[x]=0.0f;
@@ -149,28 +149,40 @@ void App::Update() {
     for(int x=0;x<16;x++) {
         if(item[x]->GetVisibility()==true) {
             if(m_Collision.CheckCollision(item[x]->GetPosition(),m_player->GetPosition(),24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)) {
-                if(mario_size==1){mario_size=2;}
-                else if(mario_size>=2&&itemx[x]==0.0f){mario_size=3;}
+                if(mario_size==1) {
+                    mario_size=2;
+                    mario_hitbox={24.0f,48.0f};
+                    m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+24.0f});
+                }
+                else if(mario_size==2&&itemx[x]==0.0f) {
+                    mario_size=3;
+                    mario_hitbox={24.0f,48.0f};
+                    m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+24.0f});
+                }
                 m_Root.RemoveChild(item[x]);
                 item[x]->SetVisible(false);
-                mario_hitbox={24.0f,48.0f};
-                m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+24.0f});
+
             }
         }
     }
     for(int i=0;i<10;i++) {
-        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false) {
+        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)) {
             if(m_PlayerPosition.y<0.0f) {
                 goomba_dead[i]=true;
                 m_PlayerPosition.y=10.0f;
             }
-            else{
+            else if(mario_size>1){
+                mari0_sizem=true;
+            }
+            else {
                 player_dead=true;
             }
             //std::cout<<m_PlayerPosition.x<<" "<<m_PlayerPosition.y<<std::endl;
         }
     }
     if(m_PlayerPosition.y<-3.0f){m_up=true;}
+
+
     if(player_dead){
         m_PlayerPosition.x=0.0f;
         m_PlayerPosition.y=0.0f;
@@ -202,6 +214,24 @@ void App::Update() {
                 m_Root.RemoveChild(item[x]);
             }
             m_CurrentState=State::START;
+        }
+    }
+
+    if(mari0_sizem) {
+        if(player_dead_animate==0&&mario_size>1) {
+            mario_size-=1;
+            if(mario_size==1) {
+                mario_hitbox={18.0f,24.0f};
+            }
+        }
+        if(player_dead_animate<50) {
+            m_PlayerPosition.x=0.0f;
+            m_PlayerPosition.y=0.0f;
+        }
+        player_dead_animate+=1;
+        if(player_dead_animate>60) {
+            player_dead_animate=0;
+            mari0_sizem=false;
         }
     }
     if(m_player->GetPosition().y<-450.0f) {
