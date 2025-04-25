@@ -109,6 +109,13 @@ void App::Update() {
                                 itemx[x]=0.0f;
                                 item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
                             }
+                            else if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()){
+                                item[x]->SetImage(GA_RESOURCE_DIR"/Image/item/coin1.png");
+                                item[x]->SetVisible(true);
+                                itemx[x]=0.0f;
+                                itemcoin[x]=true;
+                                item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
+                            }
                         }
                     }
                     else if(m_PlayerPosition.y>0.0f&&Map[i][j]==4&&mario_size>1) {
@@ -147,7 +154,7 @@ void App::Update() {
         }
     }
     for(int x=0;x<16;x++) {
-        if(item[x]->GetVisibility()==true) {
+        if(item[x]->GetVisibility()==true&&!(itemcoin[x])) {
             if(m_Collision.CheckCollision(item[x]->GetPosition(),m_player->GetPosition(),24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)) {
                 if(mario_size==1) {
                     mario_size=2;
@@ -162,6 +169,14 @@ void App::Update() {
                 m_Root.RemoveChild(item[x]);
                 item[x]->SetVisible(false);
 
+            }
+        }
+        else if(itemcoin[x]) {
+            item[x]->SetPosition({item[x]->GetPosition().x,item[x]->GetPosition().y+10.0f});
+            itemtime[x]+=1;
+            if(itemtime[x]>10) {
+                item[x]->SetVisible(false);
+                m_Root.RemoveChild(item[x]);
             }
         }
     }
@@ -250,7 +265,7 @@ void App::Update() {
     }
     //---------------------------------
     //人物轉向------------------------------------------
-    if(m_PlayerPosition.x>0.0f&&m_player->m_Transform.scale.x<0) {
+    if(m_PlayerPosition.x>0.0f&&m_player->m_Transform.scale.x<0){
         //std::cout<<"face right:"<<m_PlayerPosition.x<<std::endl;
         m_player->m_Transform.scale.x*=-1;
     }

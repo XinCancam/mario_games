@@ -56,6 +56,8 @@ void App::Start() {
         item[i]->SetPosition({0, 0});
         item[i]->SetZIndex(1);
         item[i]->SetVisible(false);
+        itemcoin[i]=false;
+        itemtime[i]=0;
         m_Root.AddChild(item[i]);
     }
     m_background=std::make_shared<BackgroundImage>();
@@ -71,6 +73,7 @@ void App::Start() {
 
     for(int i=0;i<20;i++) {
         for(int j=0;j<200;j++) {
+            map_animate[i][j]=0;
             if(Map[i][j]==2) {
                 map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground1.png");
                // std::cout<<"ok";
