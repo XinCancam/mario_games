@@ -29,6 +29,8 @@ file(GLOB_RECURSE HEADER_FILES include/*.hpp)
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         include/collison.hpp
         src/collison.cpp
+        src/Appzero.cpp
+        src/Appgameover.cpp
 )
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/PTSD)
 if(MSVC)

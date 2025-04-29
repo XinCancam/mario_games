@@ -7,6 +7,7 @@
 #include "Util/Keycode.hpp"
 
 void App::Update() {
+    //--------------move and change image-----------------------
     if(Util::Input::IsKeyDown(Util::Keycode::P)&&(!player_dead)) {
         m_player->SetPosition({0,0});
     }
@@ -63,7 +64,7 @@ void App::Update() {
             enemyy[i]-=downspeed;
         }
     }
-
+    //---------------------------------
     //Collison-------------------------
     int (*Map)[200]=m_background->NextPhase(1);
     for(int i=0;i<20;i++) {
@@ -111,6 +112,7 @@ void App::Update() {
                             }
                             else if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()){
                                 item[x]->SetImage(GA_RESOURCE_DIR"/Image/item/coin1.png");
+                                coins+=1;
                                 item[x]->SetVisible(true);
                                 itemx[x]=0.0f;
                                 itemcoin[x]=true;
@@ -153,6 +155,7 @@ void App::Update() {
             }
         }
     }
+    //-------mario eat item---------------------
     for(int x=0;x<16;x++) {
         if(item[x]->GetVisibility()==true&&!(itemcoin[x])) {
             if(m_Collision.CheckCollision(item[x]->GetPosition(),m_player->GetPosition(),24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)) {
@@ -180,6 +183,8 @@ void App::Update() {
             }
         }
     }
+    //---------------------------------------------
+    //-----------------mario collison goomba----------------------
     for(int i=0;i<10;i++) {
         if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)) {
             if(m_PlayerPosition.y<0.0f) {
@@ -195,10 +200,12 @@ void App::Update() {
             //std::cout<<m_PlayerPosition.x<<" "<<m_PlayerPosition.y<<std::endl;
         }
     }
+    //-------------------------------------
     if(m_PlayerPosition.y<-3.0f){m_up=true;}
 
-
+    //--------------player dead and restart------------------------
     if(player_dead){
+
         m_PlayerPosition.x=0.0f;
         m_PlayerPosition.y=0.0f;
         for(int x=0;x<10;x++) {
@@ -228,10 +235,41 @@ void App::Update() {
             for(int x=0;x<16;x++) {
                 m_Root.RemoveChild(item[x]);
             }
-            m_CurrentState=State::START;
+            if(lives>0){lives-=1;}
+            std::cout<<lives<<std::endl;
+            if(lives==0) {
+                std::cout<<"over"<<std::endl;
+                m_CurrentState=State::gameovers;
+            }
+            m_Root.RemoveChild(coin);
+            m_Root.RemoveChild(coinx);
+            m_Root.RemoveChild(coin1);
+            coin1->SetVisible(false);
+            coin2->SetVisible(false);
+            m_Root.RemoveChild(coin2);
+            m_Root.RemoveChild(time);
+            time->SetVisible(false);
+            time1->SetVisible(false);
+            time2->SetVisible(false);
+            time3->SetVisible(false);
+            m_Root.RemoveChild(time1);
+            m_Root.RemoveChild(time2);
+            m_Root.RemoveChild(time3);
+            m_Root.RemoveChild(world);
+            m_Root.RemoveChild(world1);
+            m_Root.RemoveChild(world2);
+            m_Root.RemoveChild(world3);
+            world3->SetVisible(false);
+            m_Root.RemoveChild(livex);
+            m_Root.RemoveChild(live1);
+            live1->SetVisible(false);
+            if(m_CurrentState==State::UPDATE) {
+                m_CurrentState=State::START;
+            }
         }
     }
-
+    //----------------------------------------
+    //------------mario size with collison-----------------
     if(mari0_sizem) {
         if(player_dead_animate==0&&mario_size>1) {
             mario_size-=1;
@@ -249,6 +287,7 @@ void App::Update() {
             mari0_sizem=false;
         }
     }
+    //----------------------------------------------------------
     if(m_player->GetPosition().y<-450.0f) {
         player_dead=true;
         m_PlayerPosition.x=0.0f;
@@ -303,9 +342,19 @@ void App::Update() {
             }
         }
     }
-    if(Util::Input::IsKeyDown(Util::Keycode::I)) {
+    //---------------UI image change------------------
+    updatetime+=1;
+    if(updatetime==60) {
+        updatetime=0;
+        times-=1;
+        time3->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(times%10)+".png");
+        time2->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(((times%100)-(times%10))/10)+".png");
+        time1->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(((times)-(times%100))/100)+".png");
 
     }
+    coin1->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string((coins-(coins%10))/10)+".png");
+    coin2->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(coins%10)+".png");
+    //------------------------------------------------
        // std::cout<<m_player->IsLooping()<<std::endl;
 
         /*
@@ -330,6 +379,7 @@ void App::Update() {
         if(m_player->GetPosition().x>0.0f&&!(map_objects[19][199]->GetPosition().x<640.0f)) {
             m_Root.Update({-(m_PlayerPosition.x),0.0f});
             m_obj2.Update({-(m_PlayerPosition.x),0.0f});
+            m_UI.Update({0.0f,0.0f});
         }
         else {
             m_Root.Update({0.0f,0.0f});

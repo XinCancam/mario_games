@@ -16,13 +16,17 @@ int main(int, char**) {
             case App::State::UPDATE:
                 app.Update();
                 break;
-
             case App::State::END:
                 app.End();
                 context->SetExit(true);
                 break;
+            case App::State::gameovers:
+                app.gameovers();
+                break;
+            case App::State::zero:
+                app.zero();
+                break;
         }
-
     }
     return 0;
 }

@@ -23,7 +23,7 @@ void App::Start() {
             else if(i==2) {
                 Imagefirerun.emplace_back(GA_RESOURCE_DIR"/Image/Fire/mario_run" + std::to_string(j + 1) + ".png");
             }
-            std::cout << i << std::endl;
+            //std::cout << i << std::endl;
         }
     }
     mario_stand.emplace_back(GA_RESOURCE_DIR"/Image/Character/mario_stand.png");
@@ -65,10 +65,93 @@ void App::Start() {
     bg->SetPosition({0, 0});
     bg->SetZIndex(1);
     m_obj.AddChild(bg);
-    // bg2=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/bg1-1.png");
-    // bg2->SetPosition({0, 0});
-    // bg2->SetZIndex(2);
-    // m_obj2.AddChild(bg2);
+    gameover=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/gameover.png");
+    gameover->SetPosition({0, 0});
+    gameover->SetZIndex(99);
+    gameover->SetVisible(false);
+    m_UI.AddChild(gameover);
+    //-----------------UI--------------------------
+    world=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/world.png");
+    world1=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/1.png");
+    world2=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/-.png");
+    world3=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/1.png");
+    world->SetPosition({-570, 280});
+    world1->SetPosition({-500, 280});
+    world2->SetPosition({-475, 275});
+    world3->SetPosition({-450, 280});
+    world->SetZIndex(2);
+    world1->SetZIndex(2);
+    world2->SetZIndex(2);
+    world3->SetZIndex(2);
+    world1->m_Transform.scale*=0.4;
+    world2->m_Transform.scale*=0.4;
+    world3->m_Transform.scale*=0.4;
+    m_obj.AddChild(world);
+    m_obj.AddChild(world1);
+    m_obj.AddChild(world2);
+    m_obj.AddChild(world3);
+
+    live=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/live2.png");
+    live1=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/0.png");
+    live1->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(lives)+".png");
+    livex=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/x.png");
+    live->SetPosition({-230, 280});
+    live1->SetPosition({-130, 280});
+    livex->SetPosition({-160, 280});
+    live->SetZIndex(2);
+    live1->SetZIndex(2);
+    livex->SetZIndex(2);
+    live1->m_Transform.scale*=0.4;
+    livex->m_Transform.scale*=0.4;
+    m_obj.AddChild(live);
+    m_obj.AddChild(live1);
+    m_obj.AddChild(livex);
+
+    time=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/time.png");
+    time1=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/4.png");
+    time2=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/0.png");
+    time3=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/0.png");
+    time->SetPosition({-40, 280});
+    time1->SetPosition({30, 280});
+    time2->SetPosition({52, 280});
+    time3->SetPosition({73, 280});
+    time->SetZIndex(2);
+    time1->SetZIndex(2);
+    time2->SetZIndex(2);
+    time3->SetZIndex(2);
+    time1->m_Transform.scale*=0.4;
+    time2->m_Transform.scale*=0.4;
+    time3->m_Transform.scale*=0.4;
+    m_obj.AddChild(time);
+    m_obj.AddChild(time1);
+    m_obj.AddChild(time2);
+    m_obj.AddChild(time3);
+    coin=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/money.png");
+    coinx=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/x.png");
+    coin1=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/0.png");
+    coin2=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/UI/0.png");
+    coin->SetPosition({-400, 280});
+    coinx->SetPosition({-370, 280});
+    coin1->SetPosition({-340, 280});
+    coin2->SetPosition({-315, 280});
+    coin->SetZIndex(2);
+    coin1->SetZIndex(2);
+    coinx->SetZIndex(2);
+    coin2->SetZIndex(2);
+    coin2->m_Transform.scale*=0.4;
+    coin->m_Transform.scale*=0.4;
+    coin1->m_Transform.scale*=0.4;
+    coinx->m_Transform.scale*=0.4;
+    m_obj.AddChild(coin);
+    m_obj.AddChild(coinx);
+    m_obj.AddChild(coin1);
+    m_obj.AddChild(coin2);
+    times=400;
+    worlds=11;
+    coins=0;
+    updatetime=0;
+
+    //-------------------------------------------------
      int (*Map)[200] = m_background->NextPhase(1);
 
     for(int i=0;i<20;i++) {
