@@ -35,12 +35,18 @@ void App::Start() {
     std::vector<std::string> Imagejbig;
     std::vector<std::string> Imagejfire;
     std::vector<std::string> mariodead;
+    std::vector<std::string> marioflag;
+    std::vector<std::string> marioflag2;
+    std::vector<std::string> marioflag3;
     Imagej.emplace_back(GA_RESOURCE_DIR"/Image/Character/mario_jump.png");
     Imagejbig.emplace_back(GA_RESOURCE_DIR"/Image/Big/mario_jump.png");
     Imagejfire.emplace_back(GA_RESOURCE_DIR"/Image/Fire/mario_jump.png");
     mariodead.emplace_back(GA_RESOURCE_DIR"/Image/Character/mario_dead.png");
+    marioflag.emplace_back(GA_RESOURCE_DIR"/Image/Character/mario_climb.png");
+    marioflag2.emplace_back(GA_RESOURCE_DIR"/Image/Big/mario_climb.png");
+    marioflag3.emplace_back(GA_RESOURCE_DIR"/Image/Fire/mario_climb.png");
     //----------------------------------------------
-    m_player = std::make_shared<AnimatedCharacter>(marioImages,Imagej,mario_stand,Imagebigrun,Imagejbig,Imagestandbig,Imagefirerun,Imagejfire,Imagestandfire,mariodead);
+    m_player = std::make_shared<AnimatedCharacter>(marioImages,Imagej,mario_stand,Imagebigrun,Imagejbig,Imagestandbig,Imagefirerun,Imagejfire,Imagestandfire,mariodead,marioflag,marioflag2,marioflag3);
     m_player->SetPosition({0, 0});
     m_player->SetZIndex(5);
     m_player->SetImage(1);
@@ -64,7 +70,7 @@ void App::Start() {
     bg=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/sky.png");
     bg->SetPosition({0, 0});
     bg->SetZIndex(1);
-    m_obj.AddChild(bg);
+    m_obj2.AddChild(bg);
     gameover=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/gameover.png");
     gameover->SetPosition({0, 0});
     gameover->SetZIndex(99);
@@ -98,9 +104,9 @@ void App::Start() {
     live->SetPosition({-230, 280});
     live1->SetPosition({-130, 280});
     livex->SetPosition({-160, 280});
-    live->SetZIndex(2);
-    live1->SetZIndex(2);
-    livex->SetZIndex(2);
+    live->SetZIndex(100);
+    live1->SetZIndex(100);
+    livex->SetZIndex(100);
     live1->m_Transform.scale*=0.4;
     livex->m_Transform.scale*=0.4;
     m_obj.AddChild(live);
@@ -115,10 +121,10 @@ void App::Start() {
     time1->SetPosition({30, 280});
     time2->SetPosition({52, 280});
     time3->SetPosition({73, 280});
-    time->SetZIndex(2);
-    time1->SetZIndex(2);
-    time2->SetZIndex(2);
-    time3->SetZIndex(2);
+    time->SetZIndex(100);
+    time1->SetZIndex(100);
+    time2->SetZIndex(100);
+    time3->SetZIndex(100);
     time1->m_Transform.scale*=0.4;
     time2->m_Transform.scale*=0.4;
     time3->m_Transform.scale*=0.4;
@@ -134,10 +140,10 @@ void App::Start() {
     coinx->SetPosition({-370, 280});
     coin1->SetPosition({-340, 280});
     coin2->SetPosition({-315, 280});
-    coin->SetZIndex(2);
-    coin1->SetZIndex(2);
-    coinx->SetZIndex(2);
-    coin2->SetZIndex(2);
+    coin->SetZIndex(100);
+    coin1->SetZIndex(100);
+    coinx->SetZIndex(100);
+    coin2->SetZIndex(100);
     coin2->m_Transform.scale*=0.4;
     coin->m_Transform.scale*=0.4;
     coin1->m_Transform.scale*=0.4;
@@ -152,16 +158,20 @@ void App::Start() {
     updatetime=0;
 
     //-------------------------------------------------
-     int (*Map)[200] = m_background->NextPhase(1);
-
-    for(int i=0;i<20;i++) {
+    auto result = m_background->NextPhase(1); // result 是 int (*)[20][200]
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 200; j++) {
+            Map[i][j] = (*result)[i][j]; // 解引用指標並複製資料
+        }
+    }
+    for(int i=0;i<30;i++) {
         for(int j=0;j<200;j++) {
             map_animate[i][j]=0;
             if(Map[i][j]==2) {
                 map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground1.png");
                // std::cout<<"ok";
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
-                map_objects[i][j]->SetZIndex(3);
+                map_objects[i][j]->SetZIndex(6);
                 m_Root.AddChild(map_objects[i][j]);
                 //std::cout <<"ok1"<< std::endl;
             }
@@ -188,35 +198,73 @@ void App::Start() {
                 m_Root.AddChild(map_objects[i][j]);
                 //std::cout <<"ok4"<< std::endl;
             }
-        else if(Map[i][j]==120) {
+        else if(Map[i][j]==120||Map[i][j]==124||Map[i][j]==128) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/pipe_lefttop.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
-            map_objects[i][j]->SetZIndex(3);
+            map_objects[i][j]->SetZIndex(6);
             m_Root.AddChild(map_objects[i][j]);
+            map_objects[i][j]->m_Transform.scale*=3;
             //std::cout <<"ok6"<< std::endl;
         }
-        else if(Map[i][j]==121) {
+        else if(Map[i][j]==121||Map[i][j]==125||Map[i][j]==129) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/pipe_righttop.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
-            map_objects[i][j]->SetZIndex(3);
+            map_objects[i][j]->SetZIndex(6);
             m_Root.AddChild(map_objects[i][j]);
+            map_objects[i][j]->m_Transform.scale*=3;
             //std::cout <<"ok6"<< std::endl;
         }
-        else if(Map[i][j]==122) {
+        else if(Map[i][j]==122||Map[i][j]==126||Map[i][j]==130) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/pipe_leftbottom.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
-            map_objects[i][j]->SetZIndex(3);
+            map_objects[i][j]->SetZIndex(6);
             m_Root.AddChild(map_objects[i][j]);
+            map_objects[i][j]->m_Transform.scale*=3;
             //std::cout <<"ok6"<< std::endl;
         }
-        else if(Map[i][j]==123) {
+        else if(Map[i][j]==123||Map[i][j]==127||Map[i][j]==131) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/pipe_rightbottom.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
-            map_objects[i][j]->SetZIndex(3);
+            map_objects[i][j]->SetZIndex(6);
+            m_Root.AddChild(map_objects[i][j]);
+            map_objects[i][j]->m_Transform.scale*=3;
+            //std::cout <<"ok6"<< std::endl;
+        }
+        else if(Map[i][j]==5) {
+            map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground2.png");
+            map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
+            map_objects[i][j]->SetZIndex(6);
             m_Root.AddChild(map_objects[i][j]);
             //std::cout <<"ok6"<< std::endl;
         }
-        //std::cout <<i<<" "<<j<< std::endl;
+        else if(Map[i][j]==6) {
+            map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/brick2.png");
+            map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
+            map_objects[i][j]->SetZIndex(6);
+            m_Root.AddChild(map_objects[i][j]);
+            //std::cout <<"ok6"<< std::endl;
+        }
+        else if(Map[i][j]==10) {
+            flag=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/flag.png");
+            flag->SetZIndex(3);
+            flagpole=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/flagpole.png");
+            flagpole->SetZIndex(3);
+            flagpole->SetPosition({-640+(j*48.0f),792-(i*48.0f)});
+            m_Root.AddChild(flagpole);
+            flag->SetPosition({-667+(j*48.0f),960-(i*48.0f)});
+            m_Root.AddChild(flag);
+            //std::cout <<"ok6"<< std::endl;
+        }
+
+        else if(Map[i][j]==11) {
+            castle=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/castle.png");
+            castle->SetPosition({-640+(j*48.0f),646-(i*48.0f)});
+            castle->SetZIndex(4);
+            castle->m_Transform.scale*=3;
+            m_Root.AddChild(castle);
+            //std::cout <<"ok6"<< std::endl;
+        }
+        std::cout <<i<<" "<<j<< std::endl;
         }
     }
 
@@ -226,7 +274,7 @@ void App::Start() {
     }
     goombadeadimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/goomba1_dead.png");
     for(int i=0;i<10;i++) {
-        goomba[i]=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+        goomba[i]=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
         goomba[i]->SetZIndex(6);
         goomba[i]->SetImage(1);
         m_Root.AddChild(goomba[i]);
@@ -234,6 +282,7 @@ void App::Start() {
         goomba_dead[i]=false;
         goomba_dead_animate[i]=0;
     }
+
     goomba[0]->SetPosition({800, 0});
     goomba[1]->SetPosition({1600, 0});
     goomba[2]->SetPosition({2400, 0});
@@ -245,10 +294,13 @@ void App::Start() {
     goomba[8]->SetPosition({8500, 0});
     goomba[9]->SetPosition({9200, 0});
     std::cout<<"k"<<std::endl;
-
+    intopipe=false;
     Animate_time=0;
     mario_size=1;
     player_dead_animate=0;
     mario_hitbox={18.0f,24.0f};
+    m_PlayerPosition={0.0f,0.0f};
+    //startscreen->SetVisible(false);
+    //m_UI.RemoveChild(startscreen);
     m_CurrentState = State::UPDATE;
 }

@@ -3,7 +3,7 @@
 
 AnimatedCharacter::AnimatedCharacter(const std::vector<std::string>& AnimationPaths1,const std::vector<std::string>& AnimationPaths2,const std::vector<std::string>& AnimationPaths3,
         const std::vector<std::string>& AnimationPaths4,const std::vector<std::string>& AnimationPaths5,const std::vector<std::string>& AnimationPaths6,
-        const std::vector<std::string>& AnimationPaths7,const std::vector<std::string>& AnimationPaths8,const std::vector<std::string>& AnimationPaths9,const std::vector<std::string>& AnimationPaths10) {
+        const std::vector<std::string>& AnimationPaths7,const std::vector<std::string>& AnimationPaths8,const std::vector<std::string>& AnimationPaths9,const std::vector<std::string>& AnimationPaths10,const std::vector<std::string>& AnimationPaths11,const std::vector<std::string>& AnimationPaths12,const std::vector<std::string>& AnimationPaths13) {
     Amimation1 = std::make_shared<Util::Animation>(AnimationPaths1, true, 250, true, 0);
     Amimation2 = std::make_shared<Util::Animation>(AnimationPaths2, true, 250, true, 0);
     Amimation3 = std::make_shared<Util::Animation>(AnimationPaths3, true, 250, true, 0);
@@ -14,6 +14,9 @@ AnimatedCharacter::AnimatedCharacter(const std::vector<std::string>& AnimationPa
     Amimation8 = std::make_shared<Util::Animation>(AnimationPaths8, true, 250, true, 0);
     Amimation9 = std::make_shared<Util::Animation>(AnimationPaths9, true, 250, true, 0);
     Amimation10 = std::make_shared<Util::Animation>(AnimationPaths10, true, 250, true, 0);
+    Amimation11 = std::make_shared<Util::Animation>(AnimationPaths11, true, 250, true, 0);
+    Amimation12 = std::make_shared<Util::Animation>(AnimationPaths12, true, 250, true, 0);
+    Amimation13 = std::make_shared<Util::Animation>(AnimationPaths13, true, 250, true, 0);
 }
 
 bool AnimatedCharacter::IfAnimationEnds() const {
@@ -50,6 +53,15 @@ void AnimatedCharacter::SetImage(const int x) {
     }
     else if(x==10) {
         m_Drawable=Amimation10;
+    }
+    else if(x==11) {
+        m_Drawable=Amimation11;
+    }
+    else if(x==12) {
+        m_Drawable=Amimation12;
+    }
+    else if(x==13) {
+        m_Drawable=Amimation13;
     }
 
 }
