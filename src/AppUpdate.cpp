@@ -8,8 +8,8 @@
 
 void App::Update() {
     //--------------move and change image-----------------------
-    if(Util::Input::IsKeyDown(Util::Keycode::P)){
-    std::cout << m_player->GetPosition().y << std::endl;
+    //if(Util::Input::IsKeyDown(Util::Keycode::P)){
+   // std::cout << m_player->GetPosition().y << std::endl;
         // if(opmode) {
         //     opmode = false;
         //     downspeed=1.0f;
@@ -20,7 +20,7 @@ void App::Update() {
         //     opmode = true;
         //     downspeed=0.0f;
         // }
-    }
+   // }
     // if(Util::Input::IsKeyDown(Util::Keycode::S)&&(opmode)) {
     //     m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y
     // -22.0f});
@@ -223,7 +223,7 @@ void App::Update() {
     if(intopipe) {
         m_PlayerPosition.y=-0.5f;
         m_PlayerPosition.x=0.0f;
-        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-30.0f) {
+        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-50.0f) {
             m_player->SetPosition({m_player->GetPosition().x+100.0f,m_player->GetPosition().y-100.0f});
             m_Root.Update({-100.0f,660.0f});
             m_obj2.Update({0.0f,660.0f});
@@ -236,7 +236,7 @@ void App::Update() {
     if(outpipe) {
         m_PlayerPosition.y=-0.5f;
         m_PlayerPosition.x=0.0f;
-        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-30.0f) {
+        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-50.0f) {
             m_Root.Update({-2800.0f,-660.0f});
             m_player->SetPosition({m_player->GetPosition().x+2600.0f,-70.0f});
             m_obj2.Update({0.0f,-660.0f});
@@ -296,6 +296,10 @@ void App::Update() {
                 m_PlayerPosition.x=0.0f;
                 m_Root.RemoveChild(m_player);
                 for(int x=0;x<10;x++) {
+                    enemyx[x]=0.0f;
+                    enemyy[x]=0.0f;
+                }
+                for(int x=0;x<10;x++) {
                     m_Root.RemoveChild(goomba[x]);
                 }
                 for(int i=0;i<30;i++) {
@@ -342,7 +346,7 @@ void App::Update() {
                 if(m_CurrentState==State::UPDATE) {
                     end=false;
                     flagtime=0;
-                    m_CurrentState=State::START;
+                    m_CurrentState=State::ONE;
                 }
             }
         }
@@ -431,7 +435,13 @@ void App::Update() {
             m_Root.RemoveChild(castle);
             live1->SetVisible(false);
             if(m_CurrentState==State::UPDATE) {
-                m_CurrentState=State::START;
+                if(worlds==11) {
+                    m_CurrentState=State::ONE;
+
+                }
+                else if(worlds==12) {
+                    m_CurrentState=State::START;
+                }
             }
         }
     }

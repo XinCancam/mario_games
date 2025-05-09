@@ -26,6 +26,9 @@ int main(int, char**) {
             case App::State::zero:
                 app.zero();
                 break;
+            case App::State::ONE:
+                app.one();
+            break;
         }
     }
     return 0;

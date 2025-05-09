@@ -20,6 +20,7 @@ public:
         UPDATE,
         gameovers,
         END,
+        ONE,
     };
 
     State GetCurrentState() const { return m_CurrentState; }
@@ -28,6 +29,7 @@ public:
     void gameovers();
     void zero();
     void startunder();
+    void one();
     void Update();
 
     void End(); // NOLINT(readability-convert-member-functions-to-static)
