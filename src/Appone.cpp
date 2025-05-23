@@ -46,7 +46,7 @@ void App::one() {
     marioflag3.emplace_back(GA_RESOURCE_DIR"/Image/Fire/mario_climb.png");
     //----------------------------------------------
     m_player = std::make_shared<AnimatedCharacter>(marioImages,Imagej,mario_stand,Imagebigrun,Imagejbig,Imagestandbig,Imagefirerun,Imagejfire,Imagestandfire,mariodead,marioflag,marioflag2,marioflag3);
-    m_player->SetPosition({0, 0});
+    m_player->SetPosition({-550, 0});
     m_player->SetZIndex(5);
     m_player->SetImage(1);
     m_Root.AddChild(m_player);
@@ -66,11 +66,11 @@ void App::one() {
         m_Root.AddChild(item[i]);
     }
     m_background=std::make_shared<BackgroundImage>();
-
     // bg=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/sky.png");
     // bg->SetPosition({0, 0});
     // bg->SetZIndex(1);
     // m_obj2.AddChild(bg);
+    m_obj2.RemoveChild(bg);
     gameover=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/background/gameover.png");
     gameover->SetPosition({0, 0});
     gameover->SetZIndex(99);
@@ -153,10 +153,10 @@ void App::one() {
     m_obj.AddChild(coin1);
     m_obj.AddChild(coin2);
     times=400;
-    worlds=11;
+    worlds=12;
     coins=0;
     updatetime=0;
-
+    mushroom_count=0;
     //-------------------------------------------------
     std::cout<<"null1"<<std::endl;
     auto result = m_background->NextPhase(2); // result 是 int (*)[30][200]
@@ -173,7 +173,7 @@ void App::one() {
         for(int j=0;j<200;j++) {
             map_animate[i][j]=0;
             if((*result)[i][j]==1) {
-                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground1.png");
+                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground2.png");
                // std::cout<<"ok";
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
                 map_objects[i][j]->SetZIndex(6);
@@ -182,7 +182,7 @@ void App::one() {
                 //std::cout <<"ok1"<< std::endl;
             }
             else if((*result)[i][j]==2) {
-                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/brick1.png");
+                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/brick2.png");
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
                 map_objects[i][j]->SetZIndex(3);
                 m_Root.AddChild(map_objects[i][j]);
@@ -190,7 +190,7 @@ void App::one() {
                 Map[i][j]=4;
             }
             else if((*result)[i][j]==3) {
-                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/mystery1_1.png");
+                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/mystery1_2.png");
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
                 map_objects[i][j]->SetZIndex(3);
                 m_Root.AddChild(map_objects[i][j]);
@@ -199,7 +199,7 @@ void App::one() {
                 //std::cout <<"ok3"<< std::endl;
             }
             else if((*result)[i][j]==4) {
-                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/slab1.png");
+                map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/slab2.png");
                 map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
                 map_objects[i][j]->SetZIndex(3);
                 m_Root.AddChild(map_objects[i][j]);
@@ -238,14 +238,14 @@ void App::one() {
             map_objects[i][j]->m_Transform.scale*=3;
             //std::cout <<"ok6"<< std::endl;
         }
-        else if(Map[i][j]==555) {
+        else if(Map[i][j]==5) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/ground2.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
             map_objects[i][j]->SetZIndex(6);
             m_Root.AddChild(map_objects[i][j]);
             //std::cout <<"ok6"<< std::endl;
         }
-        else if(Map[i][j]==666) {
+        else if(Map[i][j]==6) {
             map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/brick2.png");
             map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
             map_objects[i][j]->SetZIndex(6);
@@ -256,7 +256,7 @@ void App::one() {
             flag=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/flag.png");
             flag->SetZIndex(3);
             flagpole=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/flagpole.png");
-            flagpole->SetZIndex(3);
+            flagpole->SetZIndex(2);
             flagpole->SetPosition({-640+(j*48.0f),792-(i*48.0f)});
             m_Root.AddChild(flagpole);
             flag->SetPosition({-667+(j*48.0f),960-(i*48.0f)});
@@ -283,34 +283,52 @@ void App::one() {
     goombadeadimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/goomba1_dead.png");
     for(int i=0;i<10;i++) {
         goomba[i]=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
-        goomba[i]->SetZIndex(6);
+        goomba[i]->SetZIndex(8);
         goomba[i]->SetImage(1);
         goomba[i]->SetVisible(true);
         m_Root.AddChild(goomba[i]);
         enemyx[i]=-2.0f;
         goomba_dead[i]=false;
+        goomba_dead_fire[i]=false;
         goomba_dead_animate[i]=0;
     }
 
-    goomba[0]->SetPosition({800, 0});
-    goomba[1]->SetPosition({1600, 0});
-    goomba[2]->SetPosition({2400, 0});
-    goomba[3]->SetPosition({4000, 0});
-    goomba[4]->SetPosition({4100, 0});
-    goomba[5]->SetPosition({5600, 0});
-    goomba[6]->SetPosition({6500, 0});
-    goomba[7]->SetPosition({7300, 0});
-    goomba[8]->SetPosition({8500, 0});
-    goomba[9]->SetPosition({9200, 0});
-    std::cout<<"k"<<std::endl;
+    goomba[0]->SetPosition({0, 0});
+    goomba[1]->SetPosition({300, 0});
+    goomba[2]->SetPosition({620, 0});
+    goomba[3]->SetPosition({1020, 0});
+    goomba[4]->SetPosition({1500, 0});
+    goomba[5]->SetPosition({3000, 0});
+    goomba[6]->SetPosition({3500, 0});
+    goomba[7]->SetPosition({6000, 0});
+    goomba[8]->SetPosition({6500, 0});
+    goomba[9]->SetPosition({7300, 0});
+    std::vector<std::string> fireballimg;
+    std::vector<std::string> fireballimgp;
+    for (int i = 0; i < 4; ++i) {
+        fireballimg.emplace_back(GA_RESOURCE_DIR"/Image/Fire/fireball" + std::to_string(i + 1) + ".png");
+    }
+    for (int i = 0; i < 3; ++i) {
+        fireballimgp.emplace_back(GA_RESOURCE_DIR"/Image/Fire/fireball_explode" + std::to_string(i + 1) + ".png");
+    }
+    fireball=std::make_shared<AnimatedCharacter>(fireballimg,fireballimgp,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+    fireball->SetZIndex(6);
+    fireball->SetImage(1);
+    fireball->SetPosition(m_player->GetPosition());
+    m_Root.AddChild(fireball);
+    fireball->SetVisible(false);
     intopipe=false;
     outpipe=false;
     Animate_time=0;
     mario_size=1;
+    end=false;
+    m_up=false;
+    player_dead=false;
     player_dead_animate=0;
     mario_hitbox={18.0f,24.0f};
     m_PlayerPosition={0.0f,0.0f};
     //startscreen->SetVisible(false);
     //m_UI.RemoveChild(startscreen);
+    std::cout<<"k"<<std::endl;
     m_CurrentState = State::UPDATE;
 }

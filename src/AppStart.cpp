@@ -275,11 +275,12 @@ void App::Start() {
     goombadeadimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/goomba1_dead.png");
     for(int i=0;i<10;i++) {
         goomba[i]=std::make_shared<AnimatedCharacter>(goombaimg,goombadeadimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
-        goomba[i]->SetZIndex(6);
+        goomba[i]->SetZIndex(8);
         goomba[i]->SetImage(1);
         m_Root.AddChild(goomba[i]);
         enemyx[i]=-2.0f;
         goomba_dead[i]=false;
+        goomba_dead_fire[i]=false;
         goomba_dead_animate[i]=0;
     }
 
@@ -294,6 +295,20 @@ void App::Start() {
     goomba[8]->SetPosition({8500, 0});
     goomba[9]->SetPosition({9200, 0});
     std::cout<<"k"<<std::endl;
+    std::vector<std::string> fireballimg;
+    std::vector<std::string> fireballimgp;
+    for (int i = 0; i < 4; ++i) {
+        fireballimg.emplace_back(GA_RESOURCE_DIR"/Image/Fire/fireball" + std::to_string(i + 1) + ".png");
+    }
+    for (int i = 0; i < 3; ++i) {
+        fireballimgp.emplace_back(GA_RESOURCE_DIR"/Image/Fire/fireball_explode" + std::to_string(i + 1) + ".png");
+    }
+    fireball=std::make_shared<AnimatedCharacter>(fireballimg,fireballimgp,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+    fireball->SetZIndex(6);
+    fireball->SetImage(1);
+    fireball->SetPosition(m_player->GetPosition());
+    m_Root.AddChild(fireball);
+    fireball->SetVisible(false);
     intopipe=false;
     Animate_time=0;
     mario_size=1;

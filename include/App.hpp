@@ -35,7 +35,7 @@ public:
     void End(); // NOLINT(readability-convert-member-functions-to-static)
     App(): map_objects(30, std::vector<std::shared_ptr<Character>>(200, nullptr)),
             back_objects(20, std::vector<std::shared_ptr<Character>>(200, nullptr)),
-            itemx(16,0),itemy(16,0),item(16),goomba(10),enemyx(10),enemyy(10),goomba_dead_animate(10),goomba_dead(10),
+            itemx(16,0),itemy(16,0),item(16),goomba(10),enemyx(10),enemyy(10),goomba_dead_animate(10),goomba_dead(10),goomba_dead_fire(10),
             map_animate(30,std::vector<int>(200,0)),itemcoin(16,false),itemtime(16,0){}
 private:
     void ValidTask();
@@ -47,6 +47,13 @@ private:
     Util::Renderer m_obj2;
     Util::Renderer m_UI;
     std::shared_ptr<AnimatedCharacter> m_player;
+    std::shared_ptr<AnimatedCharacter> fireball;
+    int fireballbreaktime=0;
+    float fireballspeed=8.0f;
+    float fireballspeedy=0.0f;
+    bool fireballac=false;
+    bool fireballdead=false;
+    int playerface=1;
     std::vector<std::vector<std::shared_ptr<Character>>> map_objects;
     std::vector<std::vector<int>> map_animate;
     std::vector<std::vector<std::shared_ptr<Character>>> back_objects;
@@ -101,6 +108,7 @@ private:
     std::vector<int> itemtime;
     bool player_dead = false;
     std::vector<bool> goomba_dead;
+    std::vector<bool> goomba_dead_fire;
     std::vector<int> goomba_dead_animate;
     int player_dead_animate = 0;
     bool mari0_sizem = false;

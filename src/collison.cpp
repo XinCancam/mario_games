@@ -1,6 +1,10 @@
 #include "collison.hpp"
 
+#include <iostream>
+#include <ostream>
+
 bool Collision::CheckCollision(glm::vec2 obj1, glm::vec2 obj2,float w1,float h1,float w2,float h2) {
+   // std::cout<<"Collision::CheckCollision"<<std::endl;
     objmin2x=(obj2.x-w2);
     objmax2x=(obj2.x+w2);
     objmin2y=(obj2.y-h2);

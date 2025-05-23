@@ -31,6 +31,7 @@ public:
     [[nodiscard]] bool IfAnimationEnds() const;
     void SetPosition(const glm::vec2& Position) { m_Transform.translation = Position; }
     [[nodiscard]] const glm::vec2& GetPosition() const { return m_Transform.translation; }
+    [[nodiscard]] bool GetVisibility() const { return m_Visible; }
 private:
     std::shared_ptr<Util::Animation> Amimation1;
     std::shared_ptr<Util::Animation> Amimation2;
