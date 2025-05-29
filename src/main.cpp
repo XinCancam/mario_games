@@ -28,6 +28,9 @@ int main(int, char**) {
                 break;
             case App::State::ONE:
                 app.one();
+                break;
+            case App::State::TWO:
+                app.two();
             break;
         }
     }

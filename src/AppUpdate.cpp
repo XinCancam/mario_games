@@ -35,7 +35,7 @@ void App::Update() {
     // if(Util::Input::IsKeyDown(Util::Keycode::A)&&(opmode)) {
     //     m_player->SetPosition({m_player->GetPosition().x-22.0f,m_player->GetPosition().y});
     // }
-    if(Util::Input::IsKeyPressed(Util::Keycode::D)&&!(Util::Input::IsKeyPressed(Util::Keycode::A)&&!(end))){
+    if(Util::Input::IsKeyPressed(Util::Keycode::D)&&!(Util::Input::IsKeyPressed(Util::Keycode::A)&&(!end))){
         m_PlayerPosition.x+=m_speed;
         if(m_PlayerPosition.x>4.0f) {
             m_PlayerPosition.x=4.0f;
@@ -44,15 +44,30 @@ void App::Update() {
     if(Util::Input::IsKeyPressed(Util::Keycode::U)&&!(fireballac)&&!(fireballdead)&&mario_size==3){
         fireballac=true;
     }
-    if(Util::Input::IsKeyPressed(Util::Keycode::A)&&!(Util::Input::IsKeyPressed(Util::Keycode::D)&&!(end))) {
+    if(Util::Input::IsKeyPressed(Util::Keycode::A)&&!(Util::Input::IsKeyPressed(Util::Keycode::D)&&(!end))) {
         m_PlayerPosition.x-=m_speed;
         if(m_PlayerPosition.x<-4.0f) {
             m_PlayerPosition.x=-4.0f;
         }
     }
-    if(Util::Input::IsKeyDown(Util::Keycode::W)&&!m_up&&(!end)) {
+    if(Util::Input::IsKeyDown(Util::Keycode::W)&&!m_up&&(!end)&&!(op)) {
         m_PlayerPosition.y+=m_upspeed;
         m_up=true;
+    }
+    if(Util::Input::IsKeyPressed(Util::Keycode::W)&&(!end)&&(op)) {
+        m_player->SetPosition({m_player->GetPosition().x, m_player->GetPosition().y+3.0f});
+    }
+    if(Util::Input::IsKeyPressed(Util::Keycode::S)&&(!end)&&(op)) {
+        m_player->SetPosition({m_player->GetPosition().x, m_player->GetPosition().y-3.0f});
+    }
+    if(Util::Input::IsKeyDown(Util::Keycode::P)) {
+        if(op) {
+            op=false;
+        }
+        else {
+            op=true;
+            m_PlayerPosition.y=0.0f;
+        }
     }
     if(m_up) {
         if(mario_size==2){m_player->SetImage(5);}
@@ -84,7 +99,9 @@ void App::Update() {
             }
         }
     }
-    m_PlayerPosition.y-=downspeed;
+    if(!op) {
+        m_PlayerPosition.y-=downspeed;
+    }
     for(int i=0;i<10;i++) {
         if(goomba[i]->GetPosition().x<700.f){
             enemyy[i]-=downspeed;
@@ -100,6 +117,7 @@ void App::Update() {
             if (Map[i][j] == 2 || Map[i][j] == 3 || Map[i][j] == 4 || Map[i][j] == 1 || Map[i][j]==120 || Map[i][j]==121 || Map[i][j]==122 || Map[i][j]==123 || Map[i][j]==200||Map[i][j]==124||Map[i][j]==125||Map[i][j]==126||Map[i][j]==127||Map[i][j]==5||Map[i][j]==6||Map[i][j]==128||Map[i][j]==129||Map[i][j]==130||Map[i][j]==131) {
                 //--------character collison---------------
                 //std::cout<<"check3"<<std::endl;
+                //std::cout<<i<<" "<<j<<std::endl;
                 if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)&&(!intopipe)&&(!opmode)) {
                     //std::cout<<"check18"<<std::endl;
                     if(m_PlayerPosition.x>0.0f) {
@@ -248,32 +266,6 @@ void App::Update() {
     //std::cout<<"check4"<<std::endl;
     //---------------------------------------------
     //------------intopipe-------------------------
-    if(intopipe) {
-        m_PlayerPosition.y=-0.5f;
-        m_PlayerPosition.x=0.0f;
-        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-50.0f) {
-            m_player->SetPosition({m_player->GetPosition().x+100.0f,m_player->GetPosition().y-100.0f});
-            m_Root.Update({-100.0f,660.0f});
-            m_obj2.Update({0.0f,660.0f});
-            intopipe=false;
-            for(int k=0;k<10;k++) {
-                goomba[k]->SetVisible(false);
-            }
-        }
-    }
-    if(outpipe) {
-        m_PlayerPosition.y=-0.5f;
-        m_PlayerPosition.x=0.0f;
-        if(m_player->GetPosition().y<=map_objects[temppipe1][temppipe2]->GetPosition().y-50.0f) {
-            m_Root.Update({-2800.0f,-660.0f});
-            m_player->SetPosition({m_player->GetPosition().x+2600.0f,-70.0f});
-            m_obj2.Update({0.0f,-660.0f});
-            outpipe=false;
-            for(int k=0;k<10;k++) {
-                goomba[k]->SetVisible(true);
-            }
-        }
-    }
     //std::cout<<"checkxxx"<<std::endl;
     //---------------------------------------------
     //----------------------fireball------------------------
@@ -347,6 +339,7 @@ void App::Update() {
         }
     }
     if(end) {
+        op=false;
         if(flagtime==0) {
             m_player->SetPosition({m_player->GetPosition().x+(mario_hitbox.x*2)+6.0f,m_player->GetPosition().y});
             m_player->m_Transform.scale.x*=-1;
@@ -418,7 +411,10 @@ void App::Update() {
                         m_CurrentState=State::ONE;
                     }
                     else if(worlds==12) {
-                        m_CurrentState=State::ONE;
+                        m_CurrentState=State::TWO;
+                    }
+                    else if(worlds==13) {
+                        m_CurrentState=State::zero;
                     }
                 }
             }
@@ -428,7 +424,7 @@ void App::Update() {
     //-------------------------------------------------------
     //-----------------mario collison goomba----------------------
     for(int i=0;i<10;i++) {
-        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)) {
+        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)&&!(op)) {
             if(m_PlayerPosition.y<0.0f) {
                 goomba_dead[i]=true;
                 m_PlayerPosition.y=10.0f;
@@ -527,6 +523,9 @@ void App::Update() {
                 }
                 else if(worlds==12) {
                     m_CurrentState=State::ONE;
+                }
+                else if(worlds==13) {
+                    m_CurrentState=State::TWO;
                 }
             }
         }

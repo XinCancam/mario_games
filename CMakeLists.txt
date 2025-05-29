@@ -32,6 +32,7 @@ add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES}
         src/Appzero.cpp
         src/Appgameover.cpp
         src/Appone.cpp
+        src/Apptwo.cpp
 )
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/PTSD)
 if(MSVC)

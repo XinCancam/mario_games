@@ -21,6 +21,7 @@ public:
         gameovers,
         END,
         ONE,
+        TWO,
     };
 
     State GetCurrentState() const { return m_CurrentState; }
@@ -30,6 +31,7 @@ public:
     void zero();
     void startunder();
     void one();
+    void two();
     void Update();
 
     void End(); // NOLINT(readability-convert-member-functions-to-static)
@@ -113,6 +115,7 @@ private:
     int player_dead_animate = 0;
     bool mari0_sizem = false;
     bool m_EnterDown=false;
+    bool op=false;
     int mario_size=1;
     bool opmode;
     int mushroom_count=0;
