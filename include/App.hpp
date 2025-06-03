@@ -22,6 +22,7 @@ public:
         END,
         ONE,
         TWO,
+        Win,
     };
 
     State GetCurrentState() const { return m_CurrentState; }
@@ -33,6 +34,7 @@ public:
     void one();
     void two();
     void Update();
+    void Win();
 
     void End(); // NOLINT(readability-convert-member-functions-to-static)
     App(): map_objects(30, std::vector<std::shared_ptr<Character>>(200, nullptr)),
@@ -85,6 +87,7 @@ private:
     int gameoverscale=0;
     std::shared_ptr<Character> gameover;
     std::shared_ptr<Character> startscreen;
+    std::shared_ptr<Character> win;
     int gameovertime=0;
     bool intopipe;
     bool outpipe;

@@ -32,6 +32,9 @@ int main(int, char**) {
             case App::State::TWO:
                 app.two();
             break;
+            case App::State::Win:
+                app.Win();
+            break;
         }
     }
     return 0;

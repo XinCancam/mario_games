@@ -316,6 +316,6 @@ void App::Start() {
     mario_hitbox={18.0f,24.0f};
     m_PlayerPosition={0.0f,0.0f};
     //startscreen->SetVisible(false);
-    //m_UI.RemoveChild(startscreen);
+    m_UI.RemoveChild(startscreen);
     m_CurrentState = State::UPDATE;
 }

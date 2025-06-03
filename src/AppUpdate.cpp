@@ -118,7 +118,7 @@ void App::Update() {
                 //--------character collison---------------
                 //std::cout<<"check3"<<std::endl;
                 //std::cout<<i<<" "<<j<<std::endl;
-                if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)&&(!intopipe)&&(!opmode)) {
+                if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)&&(!intopipe)&&(!op)) {
                     //std::cout<<"check18"<<std::endl;
                     if(m_PlayerPosition.x>0.0f) {
                         std::cout<<"check12"<<std::endl;
@@ -414,7 +414,7 @@ void App::Update() {
                         m_CurrentState=State::TWO;
                     }
                     else if(worlds==13) {
-                        m_CurrentState=State::zero;
+                        m_CurrentState=State::Win;
                     }
                 }
             }
