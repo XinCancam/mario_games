@@ -52,6 +52,17 @@ private:
     Util::Renderer m_UI;
     std::shared_ptr<AnimatedCharacter> m_player;
     std::shared_ptr<AnimatedCharacter> fireball;
+    std::shared_ptr<AnimatedCharacter> bowser;
+    std::shared_ptr<AnimatedCharacter> bowser_fireball;
+    std::shared_ptr<Character> toad;
+    float bowser_fireballspeed=-8.0f;
+    float bowser_x=0.0f;
+    float bowser_y=0.0f;
+    float bowser_xspeed=1.0f;
+    int bowser_count=0;
+    float bowser_jumpspeed=20.0f;
+    bool bowser_jump=false;
+    int bowser_jumpcount=0;
     int fireballbreaktime=0;
     float fireballspeed=8.0f;
     float fireballspeedy=0.0f;

@@ -302,7 +302,7 @@ void App::two() {
     goomba[5]->SetPosition({5000, 0});
     goomba[6]->SetPosition({4800, 0});
     goomba[7]->SetPosition({4870, 0});
-    goomba[8]->SetPosition({6500, 0});
+    goomba[8]->SetPosition({2900, 0});
     goomba[9]->SetPosition({100, 100});
     std::vector<std::string> fireballimg;
     std::vector<std::string> fireballimgp;
@@ -330,6 +330,36 @@ void App::two() {
     m_PlayerPosition={0.0f,0.0f};
     //startscreen->SetVisible(false);
     //m_UI.RemoveChild(startscreen);
+    std::vector<std::string> bowserimg;
+    for (int i = 0; i < 2; ++i) {
+        bowserimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/bowser" + std::to_string(i + 1) + ".png");
+    }
+    std::vector<std::string> bowser_fireballimg;
+    for (int i = 0; i < 2; ++i) {
+        bowser_fireballimg.emplace_back(GA_RESOURCE_DIR"/Image/enemy/bowser_fireball" + std::to_string(i + 1) + ".png");
+    }
+    bowser=std::make_shared<AnimatedCharacter>(bowserimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+    bowser_fireball=std::make_shared<AnimatedCharacter>(bowser_fireballimg,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand,mario_stand);
+    bowser->SetImage(1);
+    bowser->SetZIndex(6);
+    bowser->SetPosition({8096,0});
+    bowser_fireball->SetImage(1);
+    bowser_fireball->SetZIndex(6);
+    bowser_x=0.0f;
+    bowser_y=0.0f;
+    bowser_count=0;
+    bowser_jumpcount=0;
+    bowser_jump=false;
+    bowser->m_Transform.scale.x*=-1;
+    m_Root.AddChild(bowser);
+    bowser_fireball->SetVisible(false);
+    bowser_fireball->SetPosition(bowser->GetPosition());
+    bowser_fireball->m_Transform.scale.x*=-1;
+    m_Root.AddChild(bowser_fireball);
+    toad=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/Character/toad.png");
+    toad->SetZIndex(6);
+    toad->SetPosition({8720,-157.0f});
+    m_Root.AddChild(toad);;
     std::cout<<"k"<<std::endl;
     m_CurrentState = State::UPDATE;
 }

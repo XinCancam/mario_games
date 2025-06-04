@@ -22,7 +22,7 @@ void App::zero() {
     gameovertime=0;
     lives=3;
     if(Util::Input::IsKeyDown(Util::Keycode::R)) {
-        m_CurrentState=State::START;
+        m_CurrentState=State::TWO;
         firstzero=0;
     }
     if (Util::Input::IsKeyPressed(Util::Keycode::ESCAPE) || Util::Input::IfExit()) {

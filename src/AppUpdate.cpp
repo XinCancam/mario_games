@@ -37,8 +37,8 @@ void App::Update() {
     // }
     if(Util::Input::IsKeyPressed(Util::Keycode::D)&&!(Util::Input::IsKeyPressed(Util::Keycode::A)&&(!end))){
         m_PlayerPosition.x+=m_speed;
-        if(m_PlayerPosition.x>4.0f) {
-            m_PlayerPosition.x=4.0f;
+        if(m_PlayerPosition.x>10.0f) {
+            m_PlayerPosition.x=10.0f;
         }
     }
     if(Util::Input::IsKeyPressed(Util::Keycode::U)&&!(fireballac)&&!(fireballdead)&&mario_size==3){
@@ -46,8 +46,8 @@ void App::Update() {
     }
     if(Util::Input::IsKeyPressed(Util::Keycode::A)&&!(Util::Input::IsKeyPressed(Util::Keycode::D)&&(!end))) {
         m_PlayerPosition.x-=m_speed;
-        if(m_PlayerPosition.x<-4.0f) {
-            m_PlayerPosition.x=-4.0f;
+        if(m_PlayerPosition.x<-10.0f) {
+            m_PlayerPosition.x=-10.0f;
         }
     }
     if(Util::Input::IsKeyDown(Util::Keycode::W)&&!m_up&&(!end)&&!(op)) {
@@ -106,6 +106,9 @@ void App::Update() {
         if(goomba[i]->GetPosition().x<700.f){
             enemyy[i]-=downspeed;
         }
+    }
+    if(worlds==13) {
+        bowser_y-=downspeed;
     }
     //---------------------------------
     //Collison-------------------------
@@ -228,8 +231,13 @@ void App::Update() {
                 else if(m_Collision.CheckCollision({fireball->GetPosition().x+fireballspeed,fireball->GetPosition().y},map_objects[i][j]->GetPosition(),24.0f,24.0f,24.0f,24.0f)) {
                         fireballspeed=0.0f;
                         fireballdead=true;
-
-
+                }
+                if(m_Collision.CheckCollision({bowser->GetPosition().x,bowser->GetPosition().y+bowser_y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
+                    bowser_y=0.0f;
+                    bowser_jump=false;
+                }
+                if(m_Collision.CheckCollision({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
+                    bowser_x=0.0f;
                 }
             }
         }
@@ -311,7 +319,7 @@ void App::Update() {
     }
     //------------------------------------------------------
     //-----------collison with flag--------------------------
-    if(m_Collision.CheckCollision(m_player->GetPosition(), flagpole->GetPosition(),mario_hitbox.x,mario_hitbox.y,6.0f,480.0f)) {
+    if(worlds!=13&&m_Collision.CheckCollision(m_player->GetPosition(), flagpole->GetPosition(),mario_hitbox.x,mario_hitbox.y,6.0f,480.0f)) {
         if(m_player->GetPosition().y-mario_hitbox.y>flagpole->GetPosition().y-215.0f) {
             m_PlayerPosition.y=-1.0f;
             m_PlayerPosition.x=0.0f;
@@ -338,7 +346,7 @@ void App::Update() {
             m_player->SetImage(13);
         }
     }
-    if(end) {
+    if(end&&worlds!=13) {
         op=false;
         if(flagtime==0) {
             m_player->SetPosition({m_player->GetPosition().x+(mario_hitbox.x*2)+6.0f,m_player->GetPosition().y});
@@ -515,6 +523,9 @@ void App::Update() {
             m_Root.RemoveChild(flag);
             m_Root.RemoveChild(castle);
             m_Root.RemoveChild(fireball);
+            m_Root.RemoveChild(bowser);
+            m_Root.RemoveChild(toad);
+            m_Root.RemoveChild(bowser_fireball);
             live1->SetVisible(false);
             if(m_CurrentState==State::UPDATE) {
                 if(worlds==11) {
@@ -628,6 +639,64 @@ void App::Update() {
             enemyx[k]=0.0f;
         }
     }
+    //-----------------bowser---------------------------
+    if(worlds==13) {
+        if(bowser_jump==false&&bowser_jumpcount>=240) {
+            bowser_y+=bowser_jumpspeed;
+            bowser_jump=true;
+            bowser_jumpcount=0;
+        }
+        if(bowser_jump==false) {
+            bowser_jumpcount++;
+        }
+        if(bowser->GetPosition().x<640.0f) {
+            if(bowser->GetPosition().x>map_objects[19][185]->GetPosition().x) {
+                bowser_x=-2.0f;
+                bowser_count++;
+            }
+            else if(bowser->GetPosition().x<map_objects[19][179]->GetPosition().x) {
+                bowser_x=2.0f;
+                bowser_count++;
+            }
+            else if(bowser_x==0.0f){
+                bowser_x=2.0f;
+            }
+            if(bowser_count>=6) {
+                bowser_count=0;
+            }
+        }
+        if(m_Collision.CheckCollision(m_player->GetPosition(),bowser->GetPosition(),mario_hitbox.x,mario_hitbox.y,48.0f,48.0f)&&!(op)&&mari0_sizem==false) {
+            if(mario_size>1) {
+                mari0_sizem=true;
+            }
+            else if(mario_size==1) {
+                player_dead=true;
+            }
+        }
+        if(bowser_count==2&&bowser_fireball->GetVisibility()==false) {
+            bowser_fireball->SetVisible(true);
+            bowser_fireball->SetPosition(bowser->GetPosition());
+        }
+        if(bowser_fireball->GetVisibility()==true) {
+            bowser_fireball->SetPosition({bowser_fireball->GetPosition().x+bowser_fireballspeed,bowser_fireball->GetPosition().y});
+        }
+        if(bowser_fireball->GetPosition().x<-640.0f) {
+            bowser_fireball->SetVisible(false);
+        }
+        if(m_Collision.CheckCollision(m_player->GetPosition(),bowser_fireball->GetPosition(),mario_hitbox.x,mario_hitbox.y,36.0f,12.0f)&&!(op)&&mari0_sizem==false&&bowser_fireball->GetVisibility()==true) {
+            if(mario_size>1) {
+                mari0_sizem=true;
+            }
+            else if(mario_size==1) {
+                player_dead=true;
+            }
+        }
+        if(m_Collision.CheckCollision(fireball->GetPosition(),bowser->GetPosition(),24.0f,24.0f,48.0f,48.0f)&&fireball->GetVisibility()==true) {
+            fireballdead=true;
+        }
+    }
+    bowser->SetPosition({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y+bowser_y});
+    //--------------------------------------------------
     //---------------UI image change------------------
     updatetime+=1;
     if(updatetime==60) {
