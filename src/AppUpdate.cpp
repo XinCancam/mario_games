@@ -79,7 +79,7 @@ void App::Update() {
     if(m_PlayerPosition.y<-8.0f) {
         m_PlayerPosition.y=-8.0f;
     }
-    std::cout<<"check1"<<std::endl;
+    //std::cout<<"check1"<<std::endl;
     if(!(Util::Input::IsKeyPressed(Util::Keycode::A))&&!(Util::Input::IsKeyPressed(Util::Keycode::D))) {
         m_PlayerPosition.x=0.0f;
         if(m_PlayerPosition.x==0.0f&&(!m_up)) {
@@ -113,7 +113,7 @@ void App::Update() {
     //---------------------------------
     //Collison-------------------------
 
-    std::cout<<"check2"<<std::endl;
+    //std::cout<<"check2"<<std::endl;
     for(int i=0;i<30;i++) {
         for(int j=0;j<200;j++) {
             //std::cout<<i<<" "<<j<<std::endl;
@@ -124,13 +124,13 @@ void App::Update() {
                 if (m_Collision.CheckCollision({(m_player->GetPosition().x+m_PlayerPosition.x),(m_player->GetPosition().y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)&&(!intopipe)&&(!op)) {
                     //std::cout<<"check18"<<std::endl;
                     if(m_PlayerPosition.x>0.0f) {
-                        std::cout<<"check12"<<std::endl;
+                        //std::cout<<"check12"<<std::endl;
                         float temp1=map_objects[i][j]->GetPosition().x-24.0f;
                         float temp2=m_player->GetPosition().x+mario_hitbox.x;
                         m_player->SetPosition({m_player->GetPosition().x+(temp1-temp2),m_player->GetPosition().y,});
                     }
                     else if(m_PlayerPosition.x<0.0f) {
-                        std::cout<<"check13"<<std::endl;
+                        //std::cout<<"check13"<<std::endl;
                         float temp1=map_objects[i][j]->GetPosition().x+24.0f;
                         float temp2=m_player->GetPosition().x-mario_hitbox.x;
                         m_player->SetPosition({m_player->GetPosition().x+(temp1-temp2),m_player->GetPosition().y,});
@@ -141,14 +141,14 @@ void App::Update() {
                   m_PlayerPosition.x=0.0f;
                     //std::cout<<map_objects[i][j]->GetPosition().x<<" "<<map_objects[i][j]->GetPosition().y<<std::endl;
                     //std::cout<<m_player->GetPosition().x<<" "<<m_player->GetPosition().y<<std::endl;
-                    std::cout<<"check4"<<std::endl;
+                    //std::cout<<"check4"<<std::endl;
                 }
 
                 else if (m_Collision.CheckCollision({(m_player->GetPosition().x),(m_player->GetPosition().y+m_PlayerPosition.y)}, map_objects[i][j]->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)&&(!player_dead)&&(!intopipe)&&(!opmode)) {
                    // std::cout<<"check19"<<std::endl;
                     if(m_PlayerPosition.y<0.0f) {
                         m_up=false;
-                        std::cout<<"check15"<<std::endl;
+                        //std::cout<<"check15"<<std::endl;
                         float temp1=map_objects[i][j]->GetPosition().y+24.0f;
                         float temp2=m_player->GetPosition().y-mario_hitbox.y;
                         m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
@@ -165,7 +165,7 @@ void App::Update() {
                         if(Map[i][j]==150) {
                             touchaxe=true;
                         }
-                        std::cout<<"check5"<<std::endl;
+                       // std::cout<<"check5"<<std::endl;
                     }
                     if(m_PlayerPosition.y>0.0f&&Map[i][j]==3) {
                         //std::cout<<"check6"<<std::endl;
@@ -175,7 +175,7 @@ void App::Update() {
                         float temp2=m_player->GetPosition().y+mario_hitbox.y;
                         m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
                         for(int x=0;x<16;x++) {
-                            std::cout<<"check7"<<std::endl;
+                           // std::cout<<"check7"<<std::endl;
                             if(item[x]->GetPosition()==map_objects[i][j]->GetPosition()&&x%5==0&&mario_size==1) {
                                 item[x]->SetVisible(true);
                                 item[x]->SetPosition({item[x]->GetPosition().x,map_objects[i][j]->GetPosition().y+48.0f});
@@ -197,7 +197,7 @@ void App::Update() {
                         }
                     }
                     else if(m_PlayerPosition.y>0.0f&&Map[i][j]==4&&mario_size>1) {
-                        std::cout<<"check7"<<std::endl;
+                        //std::cout<<"check7"<<std::endl;
                         m_Root.RemoveChild(map_objects[i][j]);
                         Map[i][j]=201;
                         float temp1=map_objects[i][j]->GetPosition().y-24.0f;
@@ -440,7 +440,7 @@ void App::Update() {
             }
         }
     }
-    std::cout<<"check6"<<std::endl;
+    //std::cout<<"check6"<<std::endl;
     if(m_Collision.CheckCollision(m_player->GetPosition(),toad->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)) {
                 m_PlayerPosition.x=0.0f;
                 m_Root.RemoveChild(m_player);
@@ -569,7 +569,7 @@ void App::Update() {
             if(lives>0){lives-=1;}
             std::cout<<lives<<std::endl;
             if(lives==0) {
-                std::cout<<"over"<<std::endl;
+                //std::cout<<"over"<<std::endl;
                 m_CurrentState=State::gameovers;
             }
             m_Root.RemoveChild(coin);
