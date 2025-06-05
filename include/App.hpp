@@ -60,6 +60,8 @@ private:
     float bowser_y=0.0f;
     float bowser_xspeed=1.0f;
     int bowser_count=0;
+    bool touchaxe=false;
+    int  touchcam=0;
     float bowser_jumpspeed=20.0f;
     bool bowser_jump=false;
     int bowser_jumpcount=0;

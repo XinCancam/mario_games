@@ -46,7 +46,7 @@ void App::two() {
     marioflag3.emplace_back(GA_RESOURCE_DIR"/Image/Fire/mario_climb.png");
     //----------------------------------------------
     m_player = std::make_shared<AnimatedCharacter>(marioImages,Imagej,mario_stand,Imagebigrun,Imagejbig,Imagestandbig,Imagefirerun,Imagejfire,Imagestandfire,mariodead,marioflag,marioflag2,marioflag3);
-    m_player->SetPosition({-550, 0});
+    m_player->SetPosition({-510, 0});
     m_player->SetZIndex(5);
     m_player->SetImage(1);
     m_Root.AddChild(m_player);
@@ -272,6 +272,20 @@ void App::two() {
             m_Root.AddChild(castle);
             //std::cout <<"ok6"<< std::endl;
         }
+        else if(Map[i][j]==150) {
+            map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/axe3.png");
+            map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
+            map_objects[i][j]->SetZIndex(3);
+            m_Root.AddChild(map_objects[i][j]);
+            //std::cout <<"ok6"<< std::endl;
+        }
+        else if(Map[i][j]==18) {
+            map_objects[i][j]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/castle_bridge.png");
+            map_objects[i][j]->SetPosition({-640+(j*48.0f),600-(i*48.0f)});
+            map_objects[i][j]->SetZIndex(3);
+            m_Root.AddChild(map_objects[i][j]);
+            //std::cout <<"ok6"<< std::endl;
+        }
         std::cout <<i<<" "<<j<< std::endl;
         }
     }
@@ -350,6 +364,8 @@ void App::two() {
     bowser_count=0;
     bowser_jumpcount=0;
     bowser_jump=false;
+    touchaxe=false;
+    touchcam=0;
     bowser->m_Transform.scale.x*=-1;
     m_Root.AddChild(bowser);
     bowser_fireball->SetVisible(false);

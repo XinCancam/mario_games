@@ -117,7 +117,7 @@ void App::Update() {
     for(int i=0;i<30;i++) {
         for(int j=0;j<200;j++) {
             //std::cout<<i<<" "<<j<<std::endl;
-            if (Map[i][j] == 2 || Map[i][j] == 3 || Map[i][j] == 4 || Map[i][j] == 1 || Map[i][j]==120 || Map[i][j]==121 || Map[i][j]==122 || Map[i][j]==123 || Map[i][j]==200||Map[i][j]==124||Map[i][j]==125||Map[i][j]==126||Map[i][j]==127||Map[i][j]==5||Map[i][j]==6||Map[i][j]==128||Map[i][j]==129||Map[i][j]==130||Map[i][j]==131) {
+            if (Map[i][j] == 2 || Map[i][j] == 3 || Map[i][j] == 4 || Map[i][j] == 1 || Map[i][j]==120 || Map[i][j]==121 || Map[i][j]==122 || Map[i][j]==123 || Map[i][j]==200||Map[i][j]==124||Map[i][j]==125||Map[i][j]==126||Map[i][j]==127||Map[i][j]==5||Map[i][j]==6||Map[i][j]==128||Map[i][j]==129||Map[i][j]==130||Map[i][j]==131||Map[i][j]==18||Map[i][j]==150) {
                 //--------character collison---------------
                 //std::cout<<"check3"<<std::endl;
                 //std::cout<<i<<" "<<j<<std::endl;
@@ -134,6 +134,9 @@ void App::Update() {
                         float temp1=map_objects[i][j]->GetPosition().x+24.0f;
                         float temp2=m_player->GetPosition().x-mario_hitbox.x;
                         m_player->SetPosition({m_player->GetPosition().x+(temp1-temp2),m_player->GetPosition().y,});
+                    }
+                    if(Map[i][j]==150) {
+                        touchaxe=true;
                     }
                   m_PlayerPosition.x=0.0f;
                     //std::cout<<map_objects[i][j]->GetPosition().x<<" "<<map_objects[i][j]->GetPosition().y<<std::endl;
@@ -158,6 +161,9 @@ void App::Update() {
                             outpipe=true;
                             temppipe1=i;
                             temppipe2=j;
+                        }
+                        if(Map[i][j]==150) {
+                            touchaxe=true;
                         }
                         std::cout<<"check5"<<std::endl;
                     }
@@ -238,6 +244,12 @@ void App::Update() {
                 }
                 if(m_Collision.CheckCollision({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
                     bowser_x=0.0f;
+                }
+                if(touchaxe) {
+                    if(Map[i][j]==18) {
+                        Map[i][j]=0;
+                        m_Root.RemoveChild(map_objects[i][j]);
+                    }
                 }
             }
         }
@@ -429,6 +441,68 @@ void App::Update() {
         }
     }
     std::cout<<"check6"<<std::endl;
+    if(m_Collision.CheckCollision(m_player->GetPosition(),toad->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)) {
+                m_PlayerPosition.x=0.0f;
+                m_Root.RemoveChild(m_player);
+                for(int x=0;x<10;x++) {
+                    enemyx[x]=0.0f;
+                    enemyy[x]=0.0f;
+                }
+                for(int x=0;x<10;x++) {
+                    m_Root.RemoveChild(goomba[x]);
+                }
+                for(int i=0;i<30;i++) {
+                    for(int j=0;j<200;j++) {
+                        if(Map[i][j]==200){Map[i][j]=3;}
+                        if(Map[i][j]==201){Map[i][j]=4;}
+                        m_Root.RemoveChild(map_objects[i][j]);
+                    }
+                }
+                for(int x=0;x<16;x++) {
+                    m_Root.RemoveChild(item[x]);
+                }
+                m_Root.RemoveChild(coin);
+                m_Root.RemoveChild(coinx);
+                m_Root.RemoveChild(coin1);
+                coin1->SetVisible(false);
+                coin2->SetVisible(false);
+                m_Root.RemoveChild(coin2);
+                m_Root.RemoveChild(time);
+                time->SetVisible(false);
+                time1->SetVisible(false);
+                time2->SetVisible(false);
+                time3->SetVisible(false);
+                m_Root.RemoveChild(time1);
+                m_Root.RemoveChild(time2);
+                m_Root.RemoveChild(time3);
+                m_Root.RemoveChild(world);
+                m_Root.RemoveChild(world1);
+                m_Root.RemoveChild(world2);
+                m_Root.RemoveChild(world3);
+                world3->SetVisible(false);
+                m_Root.RemoveChild(livex);
+                m_Root.RemoveChild(live1);
+                m_Root.RemoveChild(flagpole);
+                m_Root.RemoveChild(flag);
+                m_Root.RemoveChild(castle);
+                m_Root.RemoveChild(fireball);
+                live1->SetVisible(false);
+                m_obj2.RemoveChild(bg);
+                if(m_CurrentState==State::UPDATE) {
+                    end=false;
+                    flagtime=0;
+                    lives=3;
+                    if(worlds==11) {
+                        m_CurrentState=State::ONE;
+                    }
+                    else if(worlds==12) {
+                        m_CurrentState=State::TWO;
+                    }
+                    else if(worlds==13) {
+                        m_CurrentState=State::Win;
+                    }
+                }
+    }
     //-------------------------------------------------------
     //-----------------mario collison goomba----------------------
     for(int i=0;i<10;i++) {
@@ -456,7 +530,7 @@ void App::Update() {
             }
         }
     }
-    std::cout<<"check7"<<std::endl;
+    //std::cout<<"check7"<<std::endl;
     //-------------------------------------
     if(m_PlayerPosition.y<-3.0f){m_up=true;}
 
@@ -556,7 +630,7 @@ void App::Update() {
         else {
             m_player->SetVisible(true);
         }
-        if(player_dead_animate<50) {
+        if(player_dead_animate<20) {
             m_PlayerPosition.x=0.0f;
             m_PlayerPosition.y=0.0f;
         }
@@ -650,11 +724,11 @@ void App::Update() {
             bowser_jumpcount++;
         }
         if(bowser->GetPosition().x<640.0f) {
-            if(bowser->GetPosition().x>map_objects[19][185]->GetPosition().x) {
+            if(bowser->GetPosition().x>448.0f) {
                 bowser_x=-2.0f;
                 bowser_count++;
             }
-            else if(bowser->GetPosition().x<map_objects[19][179]->GetPosition().x) {
+            else if(bowser->GetPosition().x<316.0f) {
                 bowser_x=2.0f;
                 bowser_count++;
             }
@@ -732,9 +806,20 @@ void App::Update() {
 
         //camera----------------------------------------
         if(m_player->GetPosition().x>0.0f&&!(map_objects[19][199]->GetPosition().x<640.0f)&&!(end)) {
+            if(worlds==13&&touchaxe==false&&map_objects[15][188]->GetPosition().x<620.0f) {
+                    m_Root.Update({0.0f,0.0f});
+                    m_obj2.Update({0.0f,0.0f});
+            }
+            else if(touchcam<200&&map_objects[15][188]->GetPosition().x<640.0f&&touchaxe==true) {
+                m_Root.Update({-3.0f,0.0f});
+                m_obj2.Update({0.0f,0.0f});
+                touchcam++;
+            }
+            else {
                 m_Root.Update({-(m_PlayerPosition.x),0.0f});
                 m_obj2.Update({0.0f,0.0f});
                 //m_UI.Update({0.0f,0.0f});
+            }
         }
         else{
             m_Root.Update({0.0f,0.0f});
