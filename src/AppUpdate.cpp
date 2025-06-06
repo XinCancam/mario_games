@@ -37,8 +37,8 @@ void App::Update() {
     // }
     if(Util::Input::IsKeyPressed(Util::Keycode::D)&&!(Util::Input::IsKeyPressed(Util::Keycode::A)&&(!end))){
         m_PlayerPosition.x+=m_speed;
-        if(m_PlayerPosition.x>10.0f) {
-            m_PlayerPosition.x=10.0f;
+        if(m_PlayerPosition.x>5.0f) {
+            m_PlayerPosition.x=5.0f;
         }
     }
     if(Util::Input::IsKeyPressed(Util::Keycode::U)&&!(fireballac)&&!(fireballdead)&&mario_size==3){
@@ -46,8 +46,8 @@ void App::Update() {
     }
     if(Util::Input::IsKeyPressed(Util::Keycode::A)&&!(Util::Input::IsKeyPressed(Util::Keycode::D)&&(!end))) {
         m_PlayerPosition.x-=m_speed;
-        if(m_PlayerPosition.x<-10.0f) {
-            m_PlayerPosition.x=-10.0f;
+        if(m_PlayerPosition.x<-5.0f) {
+            m_PlayerPosition.x=-5.0f;
         }
     }
     if(Util::Input::IsKeyDown(Util::Keycode::W)&&!m_up&&(!end)&&!(op)) {
