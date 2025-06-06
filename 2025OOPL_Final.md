@@ -19,11 +19,11 @@ P鍵可開關作弊模式(在牆內關閉作弊模式可能會導致人物錯位
 U鍵可發射火球(前提是馬力歐在火焰狀態)
 R鍵可從起始畫面進入到第一關
 ### 遊戲畫面
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
-![alt text](image-4.png)
-![alt text](image-5.png)
+![image](https://github.com/XinCancam/mario_games/blob/main/picture/image-1.png)
+![image](https://github.com/XinCancam/mario_games/blob/main/picture/image-2.png)
+![image](https://github.com/XinCancam/mario_games/blob/main/picture/image-3.png)
+![image](https://github.com/XinCancam/mario_games/blob/main/picture/image-4.png)
+![image](https://github.com/XinCancam/mario_games/blob/main/picture/image-5.png)
 ## 程式設計
 ### 程式架構
 AppStart.cpp：遊戲開始畫面邏輯。
