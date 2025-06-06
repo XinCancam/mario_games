@@ -85,10 +85,10 @@ void App::one() {
     world1->SetPosition({-500, 280});
     world2->SetPosition({-475, 275});
     world3->SetPosition({-450, 280});
-    world->SetZIndex(2);
-    world1->SetZIndex(2);
-    world2->SetZIndex(2);
-    world3->SetZIndex(2);
+    world->SetZIndex(99);
+    world1->SetZIndex(99);
+    world2->SetZIndex(99);
+    world3->SetZIndex(99);
     world1->m_Transform.scale*=0.4;
     world2->m_Transform.scale*=0.4;
     world3->m_Transform.scale*=0.4;
@@ -324,6 +324,7 @@ void App::one() {
     end=false;
     m_up=false;
     player_dead=false;
+    mario_op=false;
     player_dead_animate=0;
     mario_hitbox={18.0f,24.0f};
     m_PlayerPosition={0.0f,0.0f};

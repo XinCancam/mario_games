@@ -1,18 +1,14 @@
-# Giraffe Adventure
-## Description
-This is a [PTSD](https://github.com/ntut-open-source-club/practical-tools-for-simple-design) framework practice for students taking the OOPL course from NTUT.
+## 超級馬力歐兄弟
 
-## Installation
-1. Clone the repository
-```bash
-git clone https://github.com/ntut-open-source-club/PTSD-Practice-Giraffe-Adventure
-```
-## Tasks
-- [ ] Replace the image of m_giraffe with giraffe.png in Resources!,
-- [ ] Make the giraffe move into the red area using the keyboard!
-- [ ] Make the chest disappear when the giraffe touches it!
-- [ ] Write a program to give your bee friend an animation!
-- [ ] Write a program to open the door when your character touches it!
-- [ ] Design a program to countdown, stop animation after OK display
+### 遊戲簡介
+我們這一組的遊戲關卡總共三關，三關都是自創的地圖。遊戲中，將會有怪物試圖阻止你通關的去路，你可以透過精湛的移動技巧或者吃花朵獲取技能去躲過或殺死它們。
+### 遊戲規則
 
-Hint:  Look for `TODO`s if you are lost.
+透過WASD去控制人物穿越障礙和怪物到達終點    
+P鍵可開關作弊模式(在牆內關閉作弊模式可能會導致人物錯位)(作弊模式1)  
+U鍵可發射火球(前提是馬力歐在火焰狀態)   
+R鍵可從起始畫面進入到第一關 
+H鍵可自由切換馬力歐大小(作弊模式2)  
+
+
+

@@ -64,6 +64,7 @@ private:
     int  touchcam=0;
     float bowser_jumpspeed=20.0f;
     bool bowser_jump=false;
+    bool mario_op=false;
     int bowser_jumpcount=0;
     int fireballbreaktime=0;
     float fireballspeed=8.0f;

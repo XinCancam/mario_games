@@ -85,10 +85,10 @@ void App::two() {
     world1->SetPosition({-500, 280});
     world2->SetPosition({-475, 275});
     world3->SetPosition({-450, 280});
-    world->SetZIndex(2);
-    world1->SetZIndex(2);
-    world2->SetZIndex(2);
-    world3->SetZIndex(2);
+    world->SetZIndex(99);
+    world1->SetZIndex(99);
+    world2->SetZIndex(99);
+    world3->SetZIndex(99);
     world1->m_Transform.scale*=0.4;
     world2->m_Transform.scale*=0.4;
     world3->m_Transform.scale*=0.4;
@@ -312,7 +312,7 @@ void App::two() {
     goomba[2]->SetPosition({620, 0});
     enemyx[2]*=-1;
     goomba[3]->SetPosition({1020, 0});
-    goomba[4]->SetPosition({4870, 0});
+    goomba[4]->SetPosition({4670, 0});
     goomba[5]->SetPosition({5000, 0});
     goomba[6]->SetPosition({4800, 0});
     goomba[7]->SetPosition({4870, 0});
@@ -365,6 +365,7 @@ void App::two() {
     bowser_jumpcount=0;
     bowser_jump=false;
     touchaxe=false;
+    mario_op=false;
     touchcam=0;
     bowser->m_Transform.scale.x*=-1;
     m_Root.AddChild(bowser);

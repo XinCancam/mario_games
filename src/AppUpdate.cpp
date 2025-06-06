@@ -238,17 +238,19 @@ void App::Update() {
                         fireballspeed=0.0f;
                         fireballdead=true;
                 }
-                if(m_Collision.CheckCollision({bowser->GetPosition().x,bowser->GetPosition().y+bowser_y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
-                    bowser_y=0.0f;
-                    bowser_jump=false;
-                }
-                if(m_Collision.CheckCollision({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
-                    bowser_x=0.0f;
-                }
-                if(touchaxe) {
-                    if(Map[i][j]==18) {
-                        Map[i][j]=0;
-                        m_Root.RemoveChild(map_objects[i][j]);
+                if(worlds==13) {
+                    if(m_Collision.CheckCollision({bowser->GetPosition().x,bowser->GetPosition().y+bowser_y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
+                        bowser_y=0.0f;
+                        bowser_jump=false;
+                    }
+                    if(m_Collision.CheckCollision({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y},map_objects[i][j]->GetPosition(),48.0f,48.0f,24.0f,24.0f)) {
+                        bowser_x=0.0f;
+                    }
+                    if(touchaxe) {
+                        if(Map[i][j]==18) {
+                            Map[i][j]=0;
+                            m_Root.RemoveChild(map_objects[i][j]);
+                        }
                     }
                 }
             }
@@ -441,7 +443,7 @@ void App::Update() {
         }
     }
     //std::cout<<"check6"<<std::endl;
-    if(m_Collision.CheckCollision(m_player->GetPosition(),toad->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)) {
+    if(worlds==13&&m_Collision.CheckCollision(m_player->GetPosition(),toad->GetPosition(),mario_hitbox.x,mario_hitbox.y,24.0f,24.0f)) {
                 m_PlayerPosition.x=0.0f;
                 m_Root.RemoveChild(m_player);
                 for(int x=0;x<10;x++) {
@@ -506,10 +508,11 @@ void App::Update() {
     //-------------------------------------------------------
     //-----------------mario collison goomba----------------------
     for(int i=0;i<10;i++) {
-        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)&&!(op)) {
+        if(m_Collision.CheckCollision(goomba[i]->GetPosition(),m_player->GetPosition() ,24.0f,24.0f,mario_hitbox.x,mario_hitbox.y)&&goomba_dead[i]==false&&player_dead==false&&!(mari0_sizem)&&!(op)&&!(mario_op)) {
             if(m_PlayerPosition.y<0.0f) {
                 goomba_dead[i]=true;
                 m_PlayerPosition.y=10.0f;
+                mario_op=true;
             }
             else if(mario_size>1){
                 mari0_sizem=true;
@@ -693,10 +696,15 @@ void App::Update() {
             enemyx[k]=0.0f;
             if(goomba_dead_animate[k]<=25) {
                 goomba_dead_animate[k]+=1;
+                mario_op=true;
             }
+             if(goomba_dead_animate[k]>=10&&goomba_dead_animate[k]<=25) {
+                 mario_op=false;
+             }
             goomba[k]->SetImage(2);
             if(goomba_dead_animate[k]>25) {
                 m_Root.RemoveChild(goomba[k]);
+                mario_op=false;
             }
         }
         if(intopipe) {
@@ -768,8 +776,9 @@ void App::Update() {
         if(m_Collision.CheckCollision(fireball->GetPosition(),bowser->GetPosition(),24.0f,24.0f,48.0f,48.0f)&&fireball->GetVisibility()==true) {
             fireballdead=true;
         }
+        bowser->SetPosition({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y+bowser_y});
     }
-    bowser->SetPosition({bowser->GetPosition().x+bowser_x,bowser->GetPosition().y+bowser_y});
+
     //--------------------------------------------------
     //---------------UI image change------------------
     updatetime+=1;
@@ -810,7 +819,7 @@ void App::Update() {
                     m_Root.Update({0.0f,0.0f});
                     m_obj2.Update({0.0f,0.0f});
             }
-            else if(touchcam<200&&map_objects[15][188]->GetPosition().x<640.0f&&touchaxe==true) {
+            else if(worlds==13&&touchcam<200&&map_objects[15][188]->GetPosition().x<640.0f&&touchaxe==true) {
                 m_Root.Update({-3.0f,0.0f});
                 m_obj2.Update({0.0f,0.0f});
                 touchcam++;

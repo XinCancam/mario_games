@@ -85,10 +85,10 @@ void App::Start() {
     world1->SetPosition({-500, 280});
     world2->SetPosition({-475, 275});
     world3->SetPosition({-450, 280});
-    world->SetZIndex(2);
-    world1->SetZIndex(2);
-    world2->SetZIndex(2);
-    world3->SetZIndex(2);
+    world->SetZIndex(99);
+    world1->SetZIndex(99);
+    world2->SetZIndex(99);
+    world3->SetZIndex(99);
     world1->m_Transform.scale*=0.4;
     world2->m_Transform.scale*=0.4;
     world3->m_Transform.scale*=0.4;
@@ -310,6 +310,7 @@ void App::Start() {
     m_Root.AddChild(fireball);
     fireball->SetVisible(false);
     intopipe=false;
+    mario_op=false;
     Animate_time=0;
     mario_size=1;
     player_dead_animate=0;
