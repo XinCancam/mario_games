@@ -256,6 +256,38 @@ void App::Update() {
             }
         }
     }
+    //------coillson with briges-------------
+    if(worlds==12) {
+        for(int j=0;j<2;j++) {
+            if(j==0) {
+                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+bridge_upspeed});
+            }
+            if(j==1) {
+                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+bridge_upspeed});
+            }
+            if(bridges[0]->GetPosition().y>600.0f) {
+                bridges[0]->SetPosition({bridges[0]->GetPosition().x,-440.0f});
+            }
+            if(bridges[1]->GetPosition().y>650.0f) {
+                bridges[1]->SetPosition({bridges[1]->GetPosition().x,-440.0f});
+            }
+        }
+        for(int i=0;i<2;i++) {
+            if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y+m_PlayerPosition.y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)) {
+                if(m_PlayerPosition.y<=0) {
+                    m_up=false;
+                    float temp1=bridges[i]->GetPosition().y+12.0f;
+                    float temp2=m_player->GetPosition().y-mario_hitbox.y;
+                    m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+(temp1-temp2),});
+                }
+                m_PlayerPosition.y=0.0f;
+            }
+            else if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)) {
+                m_PlayerPosition.x=0.0f;
+            }
+        }
+    }
+    //---------------------------------------
     //std::cout<<"checkx"<<std::endl;
     //-------mario eat item---------------------
     for(int x=0;x<16;x++) {
@@ -433,6 +465,8 @@ void App::Update() {
                         m_CurrentState=State::ONE;
                     }
                     else if(worlds==12) {
+                        m_Root.RemoveChild(bridges[0]);
+                        m_Root.RemoveChild(bridges[1]);
                         m_CurrentState=State::TWO;
                     }
                     else if(worlds==13) {
@@ -610,6 +644,8 @@ void App::Update() {
 
                 }
                 else if(worlds==12) {
+                    m_Root.RemoveChild(bridges[0]);
+                    m_Root.RemoveChild(bridges[1]);
                     m_CurrentState=State::ONE;
                 }
                 else if(worlds==13) {

@@ -328,6 +328,13 @@ void App::one() {
     player_dead_animate=0;
     mario_hitbox={18.0f,24.0f};
     m_PlayerPosition={0.0f,0.0f};
+    for(int i=0;i<2;i++) {
+        bridges[i]=std::make_shared<Character>(GA_RESOURCE_DIR"/Image/mapObjects/bridge1.png");
+        bridges[i]->SetZIndex(8);
+        bridges[i]->SetPosition({7650+(i*172),0});
+        m_Root.AddChild(bridges[i]);
+    }
+
     //startscreen->SetVisible(false);
     //m_UI.RemoveChild(startscreen);
     std::cout<<"k"<<std::endl;

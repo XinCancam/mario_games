@@ -40,7 +40,7 @@ public:
     App(): map_objects(30, std::vector<std::shared_ptr<Character>>(200, nullptr)),
             back_objects(20, std::vector<std::shared_ptr<Character>>(200, nullptr)),
             itemx(16,0),itemy(16,0),item(16),goomba(10),enemyx(10),enemyy(10),goomba_dead_animate(10),goomba_dead(10),goomba_dead_fire(10),
-            map_animate(30,std::vector<int>(200,0)),itemcoin(16,false),itemtime(16,0){}
+            map_animate(30,std::vector<int>(200,0)),itemcoin(16,false),itemtime(16,0),bridges(2){}
 private:
     void ValidTask();
 
@@ -93,6 +93,9 @@ private:
     std::shared_ptr<Character> coinx;
     std::shared_ptr<Character> coin1;
     std::shared_ptr<Character> coin2;
+    std::vector<std::shared_ptr<Character>> bridges;
+    float bridge_upspeed=3.0f;
+    float bridge_downspeed=-3.0f;
     int times=0;
     int lives=3;
     int worlds=0;
