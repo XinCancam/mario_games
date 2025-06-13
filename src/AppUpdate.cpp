@@ -260,10 +260,10 @@ void App::Update() {
     if(worlds==12) {
         for(int j=0;j<2;j++) {
             if(j==0) {
-                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+bridge_upspeed});
+                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+(2*bridge_upspeed)});
             }
             if(j==1) {
-                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+bridge_upspeed});
+                bridges[j]->SetPosition({bridges[j]->GetPosition().x,bridges[j]->GetPosition().y+(bridge_upspeed)});
             }
             if(bridges[0]->GetPosition().y>600.0f) {
                 bridges[0]->SetPosition({bridges[0]->GetPosition().x,-440.0f});
@@ -273,7 +273,7 @@ void App::Update() {
             }
         }
         for(int i=0;i<2;i++) {
-            if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y+m_PlayerPosition.y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)) {
+            if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y+m_PlayerPosition.y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)&&(!opmode)) {
                 if(m_PlayerPosition.y<=0) {
                     m_up=false;
                     float temp1=bridges[i]->GetPosition().y+12.0f;
@@ -282,7 +282,7 @@ void App::Update() {
                 }
                 m_PlayerPosition.y=0.0f;
             }
-            else if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)) {
+            else if(m_Collision.CheckCollision({m_player->GetPosition().x,m_player->GetPosition().y},bridges[i]->GetPosition(),mario_hitbox.x,mario_hitbox.y,72.0f,12.0f)&&(!opmode)) {
                 m_PlayerPosition.x=0.0f;
             }
         }
@@ -300,8 +300,6 @@ void App::Update() {
                 }
                 else if(mario_size==2&&itemx[x]==0.0f) {
                     mario_size=3;
-                    mario_hitbox={24.0f,48.0f};
-                    m_player->SetPosition({m_player->GetPosition().x,m_player->GetPosition().y+24.0f});
                 }
                 m_Root.RemoveChild(item[x]);
                 item[x]->SetVisible(false);
@@ -606,6 +604,13 @@ void App::Update() {
             if(lives>0){lives-=1;}
             std::cout<<lives<<std::endl;
             if(lives==0) {
+                if(worlds==12) {
+                    m_Root.RemoveChild(bridges[0]);
+                    m_Root.RemoveChild(bridges[1]);
+                }
+                if(worlds==13) {
+                    m_Root.RemoveChild(toad);
+                }
                 //std::cout<<"over"<<std::endl;
                 m_CurrentState=State::gameovers;
             }
@@ -824,7 +829,10 @@ void App::Update() {
         time3->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(times%10)+".png");
         time2->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(((times%100)-(times%10))/10)+".png");
         time1->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(((times)-(times%100))/100)+".png");
-
+        if(times<=0) {
+            times=0;
+            player_dead=true;
+        }
     }
     coin1->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string((coins-(coins%10))/10)+".png");
     coin2->SetImage(GA_RESOURCE_DIR"/Image/UI/"+std::to_string(coins%10)+".png");
